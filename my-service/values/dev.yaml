@@ -1,8 +1,0 @@
-# Values for development environment
-replicaCount: 1
-image:
-  repository: my-service
-  tag: latest
-env:
-  - name: ENV
-    value: dev

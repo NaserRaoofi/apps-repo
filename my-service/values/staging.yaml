@@ -1,8 +1,0 @@
-# Values for staging environment
-replicaCount: 2
-image:
-  repository: my-service
-  tag: staging
-env:
-  - name: ENV
-    value: staging

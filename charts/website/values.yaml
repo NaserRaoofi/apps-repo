@@ -1,0 +1,60 @@
+# Default values for website chart.
+# This is a YAML-formatted file.
+# Declare variables to be passed into your templates.
+
+name: my-website
+domain: example.com
+
+replicaCount: 1
+
+image:
+  repository: bitnami/wordpress
+  tag: "6.4.2"
+  pullPolicy: IfNotPresent
+
+imagePullSecrets: []
+
+service:
+  type: ClusterIP
+  port: 80
+  targetPort: 8080
+
+ingress:
+  enabled: false
+  className: ""
+  annotations: {}
+    # kubernetes.io/ingress.class: nginx
+    # kubernetes.io/tls-acme: "true"
+  tls: {}
+    # secretName: chart-example-tls
+
+resources:
+  # We usually recommend not to specify default resources and to leave this as a conscious
+  # choice for the user. This also increases chances charts run on environments with little
+  # resources, such as Minikube. If you do want to specify resources, uncomment the following
+  # lines, adjust them as necessary, and remove the curly braces after 'resources:'.
+  limits:
+    cpu: 500m
+    memory: 512Mi
+  requests:
+    cpu: 250m
+    memory: 256Mi
+
+healthcheck:
+  enabled: true
+  path: /
+  initialDelaySeconds: 30
+  periodSeconds: 10
+
+# Environment variables
+env: []
+  # - name: WORDPRESS_DB_HOST
+  #   value: "mysql"
+  # - name: WORDPRESS_DB_USER
+  #   value: "wordpress"
+
+nodeSelector: {}
+
+tolerations: []
+
+affinity: {}

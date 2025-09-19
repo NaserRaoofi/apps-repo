@@ -1,8 +1,0 @@
-# Values for production environment
-replicaCount: 3
-image:
-  repository: my-service
-  tag: prod
-env:
-  - name: ENV
-    value: prod
