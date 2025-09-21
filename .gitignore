@@ -123,3 +123,62 @@ charts/website-template/values/values-*.yaml
 # Build artifacts
 *.tar.gz
 *.zip
+
+# Large files and binaries
+*.exe
+*.dll
+*.so
+*.dylib
+*.bin
+*.dat
+*.img
+*.iso
+*.dmg
+*.pkg
+*.deb
+*.rpm
+
+# Media files (if accidentally added)
+*.mp4
+*.avi
+*.mov
+*.mkv
+*.mp3
+*.wav
+*.flac
+*.png
+*.jpg
+*.jpeg
+*.gif
+*.bmp
+*.tiff
+*.webp
+*.svg
+
+# Archives
+*.rar
+*.7z
+*.tar
+*.tar.bz2
+*.tar.xz
+*.gz
+*.bz2
+*.xz
+
+# Large data files
+*.csv
+*.json
+*.xml
+*.xlsx
+*.docx
+*.pdf
+
+# Docker
+.dockerignore
+Dockerfile.prod
+docker-compose.override.yml
+
+# Backup files
+*.bak
+*.backup
+*.old
