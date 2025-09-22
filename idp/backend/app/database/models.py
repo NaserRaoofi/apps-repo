@@ -55,9 +55,13 @@ class Website(Base):
     admin_username = Column(String(100), nullable=False)
     admin_password = Column(String(255), nullable=False)  # Will be hashed
     admin_email = Column(String(255), nullable=False)
+    blog_name = Column(String(255), nullable=True)  # WordPress blog name
 
     # Status and Metadata
-    status = Column(SQLEnum(WebsiteStatusEnum), default=WebsiteStatusEnum.PENDING)
+    status = Column(
+        SQLEnum(WebsiteStatusEnum),
+        default=WebsiteStatusEnum.PENDING,
+    )
 
     # Timestamps
     created_at = Column(DateTime(timezone=True), server_default=func.now())
@@ -81,74 +85,126 @@ class Website(Base):
             "id": self.id,
             "website_id": self.website_id,
             "domain": self.domain,
-            "website_type": (self.website_type.value if self.website_type else None),
+            "website_type": (
+                self.website_type.value
+                if getattr(self, "website_type") is not None
+                else None
+            ),
             "cluster": self.cluster,
-            "resource_plan": (self.resource_plan.value if self.resource_plan else None),
-            "database_type": (self.database_type.value if self.database_type else None),
+            "resource_plan": (
+                self.resource_plan.value
+                if getattr(self, "resource_plan") is not None
+                else None
+            ),
+            "database_type": (
+                self.database_type.value
+                if getattr(self, "database_type") is not None
+                else None
+            ),
             "storage_class": self.storage_class,
             "admin_username": self.admin_username,
             "admin_email": self.admin_email,
-            "status": self.status.value if self.status else None,
-            "created_at": (self.created_at.isoformat() if self.created_at else None),
-            "updated_at": (self.updated_at.isoformat() if self.updated_at else None),
-            "deployed_at": (self.deployed_at.isoformat() if self.deployed_at else None),
+            "status": (
+                self.status.value if getattr(self, "status") is not None else None
+            ),
+            "created_at": (
+                self.created_at.isoformat()
+                if getattr(self, "created_at") is not None
+                else None
+            ),
+            "updated_at": (
+                self.updated_at.isoformat()
+                if getattr(self, "updated_at") is not None
+                else None
+            ),
+            "deployed_at": (
+                self.deployed_at.isoformat()
+                if getattr(self, "deployed_at") is not None
+                else None
+            ),
             "description": self.description,
             "namespace": self.namespace,
             "ingress_url": self.ingress_url,
         }
 
     def to_helm_values(self):
-        """Generate Helm values.yaml structure from website data."""
+        """Generate Bitnami WordPress values for bitnami/wordpress chart."""
         resource_configs = {
             "basic": {"cpu": "200m", "memory": "512Mi", "storage": "5Gi"},
             "standard": {"cpu": "500m", "memory": "1Gi", "storage": "10Gi"},
             "premium": {"cpu": "1000m", "memory": "2Gi", "storage": "20Gi"},
         }
 
-        plan_config = resource_configs.get(
-            self.resource_plan.value, resource_configs["basic"]
+        plan_key = (
+            self.resource_plan.value
+            if getattr(self, "resource_plan") is not None
+            else "basic"
+        )
+        plan_config = resource_configs.get(plan_key, resource_configs["basic"])
+
+        website_id = self.website_id or "wordpress"
+        db_name = f"{website_id.replace('-', '_')}_db"
+        blog_title = getattr(self, "blog_name", None) or (
+            f"{website_id.replace('-', ' ').title()} Site"
         )
 
-        return {
-            "site": {
-                "name": self.website_id,
-                "domain": self.domain,
+        values = {
+            "image": {
+                "repository": "bitnami/wordpress",
+                "tag": "latest",
+                "pullPolicy": "IfNotPresent",
             },
-            "wordpress": {
-                "username": self.admin_username,
-                "password": "changeme",  # Will be auto-generated in deployment
-                "email": self.admin_email,
-                "title": f"{self.website_id.replace('-', ' ').title()} Site",
+            "wordpressUsername": self.admin_username,
+            # TODO: generate secret instead of inline password
+            "wordpressPassword": "changeme",
+            "wordpressEmail": self.admin_email,
+            "wordpressBlogName": blog_title,
+            "service": {"type": "ClusterIP"},
+            "ingress": {
+                "enabled": True,
+                "hostname": self.domain,
+                "annotations": {
+                    "kubernetes.io/ingress.class": "alb",
+                    "alb.ingress.kubernetes.io/scheme": "internet-facing",
+                    "alb.ingress.kubernetes.io/target-type": "ip",
+                    "alb.ingress.kubernetes.io/certificate-arn": (
+                        "arn:aws:acm:us-east-1:235494806851:certificate/"
+                        "5aef376a-2e75-4311-9da2-88fed693eecf"
+                    ),
+                    "external-dns.alpha.kubernetes.io/hostname": self.domain,
+                },
+                "tls": True,
+            },
+            "persistence": {
+                "enabled": True,
+                "storageClass": self.storage_class,
+                "size": plan_config["storage"],
+            },
+            "mariadb": {
+                "enabled": self.database_type == DatabaseTypeEnum.INTERNAL,
+                "auth": {
+                    "username": "wpuser",
+                    "password": "wppass",  # TODO: generate securely
+                    "rootPassword": "rootpass",  # TODO: generate securely
+                    "database": db_name,
+                },
+                "primary": {
+                    "persistence": {
+                        "enabled": True,
+                        "storageClass": self.storage_class,
+                        "size": plan_config["storage"],
+                    }
+                },
             },
             "resources": {
                 "requests": {
                     "cpu": plan_config["cpu"],
                     "memory": plan_config["memory"],
                 },
-                "limits": {"cpu": plan_config["cpu"], "memory": plan_config["memory"]},
-            },
-            "storage": {
-                "class": self.storage_class,
-                "size": plan_config["storage"],
-            },
-            "database": {
-                "enabled": self.database_type == DatabaseTypeEnum.INTERNAL,
-                "user": "wpuser",
-                "password": "wppass",  # Will be auto-generated
-                "rootPassword": "rootpass",  # Will be auto-generated
-                "name": f"{self.website_id.replace('-', '_')}_db",
-            },
-            "image": {
-                "repository": f"{self.website_type.value}",
-                "tag": "latest",
-                "pullPolicy": "IfNotPresent",
-            },
-            "replicaCount": 1,
-            "service": {"type": "ClusterIP", "port": 80},
-            "ingress": {
-                "enabled": True,
-                "className": "nginx",
-                "annotations": {"cert-manager.io/cluster-issuer": "letsencrypt-prod"},
+                "limits": {
+                    "cpu": plan_config["cpu"],
+                    "memory": plan_config["memory"],
+                },
             },
             "autoscaling": {
                 "enabled": False,
@@ -156,9 +212,7 @@ class Website(Base):
                 "maxReplicas": 5,
                 "targetCPUUtilizationPercentage": 70,
             },
-            "nodeSelector": {},
-            "tolerations": [],
-            "affinity": {},
-            "podSecurityContext": {},
-            "securityContext": {},
         }
+        return values
+
+        return values

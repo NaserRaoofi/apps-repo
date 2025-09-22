@@ -3,31 +3,22 @@
 import { useState } from "react";
 
 interface WebsiteFormData {
-  websiteId: string;
-  domain: string;
-  type: "wordpress" | "drupal" | "custom";
-  plan: "basic" | "standard" | "premium";
-  databaseType: "internal" | "external";
-  adminUsername: string;
-  adminPassword: string;
-  adminEmail: string;
-  storageClass: string;
-  cluster: string;
+  // اطلاعات ادمین سایت
+  adminUsername: string; // wordpressUsername
+  adminPassword: string; // wordpressPassword
+  adminEmail: string; // wordpressEmail
+  blogName: string; // wordpressBlogName
+  subdomain: string; // برای hostname: subdomain.myplatform.com
 }
 
 export default function CreateWebsitePage() {
   const [currentStep, setCurrentStep] = useState(1);
   const [formData, setFormData] = useState<WebsiteFormData>({
-    websiteId: "",
-    domain: "",
-    type: "wordpress",
-    plan: "basic",
-    databaseType: "internal",
     adminUsername: "",
     adminPassword: "",
     adminEmail: "",
-    storageClass: "gp2",
-    cluster: "dev",
+    blogName: "",
+    subdomain: "",
   });
 
   const updateFormData = (field: keyof WebsiteFormData, value: string) => {
@@ -35,7 +26,7 @@ export default function CreateWebsitePage() {
   };
 
   const nextStep = () => {
-    if (currentStep < 4) setCurrentStep(currentStep + 1);
+    if (currentStep < 3) setCurrentStep(currentStep + 1);
   };
 
   const prevStep = () => {
@@ -50,37 +41,57 @@ export default function CreateWebsitePage() {
     setSubmitError(null);
 
     try {
+      // Send only simplified fields (backend auto-generates the rest)
+      const backendData = {
+        adminUsername: formData.adminUsername,
+        adminPassword: formData.adminPassword,
+        adminEmail: formData.adminEmail,
+        blogName: formData.blogName,
+        subdomain: formData.subdomain,
+      };
+
       const response = await fetch("http://localhost:8001/api/v1/websites/", {
         method: "POST",
         headers: {
           "Content-Type": "application/json",
         },
-        body: JSON.stringify(formData),
+        body: JSON.stringify(backendData),
       });
 
       if (!response.ok) {
-        const errorData = await response.json();
-        throw new Error(errorData.detail || `HTTP error! status: ${response.status}`);
+        let message = `HTTP error ${response.status}`;
+        try {
+          const errorData = await response.json();
+          if (Array.isArray(errorData.detail)) {
+            // Pydantic validation errors array
+            message = errorData.detail
+              .map((e: any) => {
+                const field = Array.isArray(e.loc) ? e.loc.slice(-1)[0] : e.loc;
+                return `${field}: ${e.msg}`;
+              })
+              .join("; ");
+          } else if (errorData.detail) {
+            message = errorData.detail;
+          }
+        } catch (_) {
+          // ignore JSON parse issues
+        }
+        throw new Error(message);
       }
 
       const result = await response.json();
       console.log("Website created successfully:", result);
 
       // Show success message and redirect or reset form
-      alert(`Website "${formData.websiteId}" created successfully! Status: ${result.status}`);
+      alert(`Website "${formData.blogName}" created successfully!`);
 
       // Reset form
       setFormData({
-        websiteId: "",
-        domain: "",
-        type: "wordpress",
-        plan: "basic",
-        databaseType: "internal",
         adminUsername: "",
         adminPassword: "",
         adminEmail: "",
-        storageClass: "gp2",
-        cluster: "dev",
+        blogName: "",
+        subdomain: "",
       });
       setCurrentStep(1);
     } catch (error) {
@@ -89,12 +100,6 @@ export default function CreateWebsitePage() {
     } finally {
       setIsSubmitting(false);
     }
-  };
-
-  const resourcePlans = {
-    basic: { cpu: "200m", ram: "512Mi", storage: "1Gi" },
-    standard: { cpu: "500m", ram: "1Gi", storage: "5Gi" },
-    premium: { cpu: "1000m", ram: "2Gi", storage: "20Gi" },
   };
 
   return (
@@ -109,7 +114,7 @@ export default function CreateWebsitePage() {
       {/* Progress Steps */}
       <div className="bg-white border border-gray-200 rounded-lg p-6">
         <div className="flex items-center justify-between mb-8">
-          {[1, 2, 3, 4].map((step) => (
+          {[1, 2, 3].map((step) => (
             <div key={step} className="flex items-center">
               <div
                 className={`w-8 h-8 rounded-full flex items-center justify-center text-sm font-medium ${
@@ -120,11 +125,10 @@ export default function CreateWebsitePage() {
               </div>
               <div className="ml-2 text-sm font-medium text-gray-900">
                 {step === 1 && "Website Details"}
-                {step === 2 && "Configuration"}
-                {step === 3 && "Admin Setup"}
-                {step === 4 && "Review"}
+                {step === 2 && "Auto Configuration"}
+                {step === 3 && "Review & Deploy"}
               </div>
-              {step < 4 && <div className={`ml-4 w-16 h-0.5 ${step < currentStep ? "bg-blue-600" : "bg-gray-200"}`} />}
+              {step < 3 && <div className={`ml-4 w-16 h-0.5 ${step < currentStep ? "bg-blue-600" : "bg-gray-200"}`} />}
             </div>
           ))}
         </div>
@@ -132,130 +136,10 @@ export default function CreateWebsitePage() {
         {/* Step 1: Website Details */}
         {currentStep === 1 && (
           <div className="space-y-6">
-            <h2 className="text-lg font-medium text-gray-900">Website Details</h2>
+            <h2 className="text-lg font-medium text-gray-900">WordPress Admin Details</h2>
+            <p className="text-sm text-gray-600">Enter the admin credentials for your WordPress site</p>
 
             <div className="grid grid-cols-1 gap-6 sm:grid-cols-2">
-              <div>
-                <label className="block text-sm font-medium text-gray-700 mb-2">Website ID</label>
-                <input
-                  type="text"
-                  value={formData.websiteId}
-                  onChange={(e) => updateFormData("websiteId", e.target.value)}
-                  placeholder="my-website"
-                  className="w-full px-3 py-2 border border-gray-300 rounded-md focus:outline-none focus:ring-2 focus:ring-blue-500"
-                />
-              </div>
-
-              <div>
-                <label className="block text-sm font-medium text-gray-700 mb-2">Domain</label>
-                <input
-                  type="text"
-                  value={formData.domain}
-                  onChange={(e) => updateFormData("domain", e.target.value)}
-                  placeholder="example.com"
-                  className="w-full px-3 py-2 border border-gray-300 rounded-md focus:outline-none focus:ring-2 focus:ring-blue-500"
-                />
-              </div>
-
-              <div>
-                <label className="block text-sm font-medium text-gray-700 mb-2">Website Type</label>
-                <select
-                  value={formData.type}
-                  onChange={(e) => updateFormData("type", e.target.value)}
-                  className="w-full px-3 py-2 border border-gray-300 rounded-md focus:outline-none focus:ring-2 focus:ring-blue-500"
-                >
-                  <option value="wordpress">WordPress</option>
-                  <option value="drupal">Drupal</option>
-                  <option value="custom">Custom Application</option>
-                </select>
-              </div>
-
-              <div>
-                <label className="block text-sm font-medium text-gray-700 mb-2">Cluster</label>
-                <select
-                  value={formData.cluster}
-                  onChange={(e) => updateFormData("cluster", e.target.value)}
-                  className="w-full px-3 py-2 border border-gray-300 rounded-md focus:outline-none focus:ring-2 focus:ring-blue-500"
-                >
-                  <option value="dev">Development</option>
-                  <option value="staging">Staging</option>
-                  <option value="prod">Production</option>
-                </select>
-              </div>
-            </div>
-          </div>
-        )}
-
-        {/* Step 2: Configuration */}
-        {currentStep === 2 && (
-          <div className="space-y-6">
-            <h2 className="text-lg font-medium text-gray-900">Configuration</h2>
-
-            <div>
-              <label className="block text-sm font-medium text-gray-700 mb-4">Resource Plan</label>
-              <div className="grid grid-cols-1 gap-4 sm:grid-cols-3">
-                {Object.entries(resourcePlans).map(([plan, resources]) => (
-                  <div
-                    key={plan}
-                    className={`border rounded-lg p-4 cursor-pointer transition-colors ${
-                      formData.plan === plan ? "border-blue-500 bg-blue-50" : "border-gray-200 hover:border-gray-300"
-                    }`}
-                    onClick={() => updateFormData("plan", plan)}
-                  >
-                    <div className="flex items-center">
-                      <input
-                        type="radio"
-                        checked={formData.plan === plan}
-                        onChange={() => updateFormData("plan", plan)}
-                        className="mr-3"
-                      />
-                      <div>
-                        <h3 className="font-medium text-gray-900 capitalize">{plan}</h3>
-                        <p className="text-sm text-gray-500">
-                          CPU: {resources.cpu} | RAM: {resources.ram} | Storage: {resources.storage}
-                        </p>
-                      </div>
-                    </div>
-                  </div>
-                ))}
-              </div>
-            </div>
-
-            <div className="grid grid-cols-1 gap-6 sm:grid-cols-2">
-              <div>
-                <label className="block text-sm font-medium text-gray-700 mb-2">Database Type</label>
-                <select
-                  value={formData.databaseType}
-                  onChange={(e) => updateFormData("databaseType", e.target.value)}
-                  className="w-full px-3 py-2 border border-gray-300 rounded-md focus:outline-none focus:ring-2 focus:ring-blue-500"
-                >
-                  <option value="internal">Internal Database</option>
-                  <option value="external">External Database</option>
-                </select>
-              </div>
-
-              <div>
-                <label className="block text-sm font-medium text-gray-700 mb-2">Storage Class</label>
-                <select
-                  value={formData.storageClass}
-                  onChange={(e) => updateFormData("storageClass", e.target.value)}
-                  className="w-full px-3 py-2 border border-gray-300 rounded-md focus:outline-none focus:ring-2 focus:ring-blue-500"
-                >
-                  <option value="gp2">General Purpose SSD (gp2)</option>
-                  <option value="gp3">General Purpose SSD (gp3)</option>
-                  <option value="io1">Provisioned IOPS SSD (io1)</option>
-                </select>
-              </div>
-            </div>
-          </div>
-        )}
-
-        {/* Step 3: Admin Setup */}
-        {currentStep === 3 && (
-          <div className="space-y-6">
-            <h2 className="text-lg font-medium text-gray-900">Admin Setup</h2>
-
-            <div className="grid grid-cols-1 gap-6">
               <div>
                 <label className="block text-sm font-medium text-gray-700 mb-2">Admin Username</label>
                 <input
@@ -273,7 +157,7 @@ export default function CreateWebsitePage() {
                   type="password"
                   value={formData.adminPassword}
                   onChange={(e) => updateFormData("adminPassword", e.target.value)}
-                  placeholder="••••••••"
+                  placeholder="Strong password"
                   className="w-full px-3 py-2 border border-gray-300 rounded-md focus:outline-none focus:ring-2 focus:ring-blue-500"
                 />
               </div>
@@ -288,54 +172,115 @@ export default function CreateWebsitePage() {
                   className="w-full px-3 py-2 border border-gray-300 rounded-md focus:outline-none focus:ring-2 focus:ring-blue-500"
                 />
               </div>
+
+              <div>
+                <label className="block text-sm font-medium text-gray-700 mb-2">Blog Name</label>
+                <input
+                  type="text"
+                  value={formData.blogName}
+                  onChange={(e) => updateFormData("blogName", e.target.value)}
+                  placeholder="My Awesome Blog"
+                  className="w-full px-3 py-2 border border-gray-300 rounded-md focus:outline-none focus:ring-2 focus:ring-blue-500"
+                />
+              </div>
+
+              <div className="sm:col-span-2">
+                <label className="block text-sm font-medium text-gray-700 mb-2">Subdomain</label>
+                <div className="flex">
+                  <input
+                    type="text"
+                    value={formData.subdomain}
+                    onChange={(e) => updateFormData("subdomain", e.target.value)}
+                    placeholder="mysite"
+                    className="flex-1 px-3 py-2 border border-gray-300 rounded-l-md focus:outline-none focus:ring-2 focus:ring-blue-500"
+                  />
+                  <span className="px-3 py-2 bg-gray-50 border border-l-0 border-gray-300 rounded-r-md text-gray-500">
+                    .naserraoofi.com
+                  </span>
+                </div>
+                <p className="mt-1 text-xs text-gray-500">
+                  Your site will be available at: https://{formData.subdomain || "subdomain"}.naserraoofi.com
+                </p>
+              </div>
             </div>
           </div>
         )}
 
-        {/* Step 4: Review */}
-        {currentStep === 4 && (
+        {/* Step 2: Auto Configuration */}
+        {currentStep === 2 && (
           <div className="space-y-6">
-            <h2 className="text-lg font-medium text-gray-900">Review & Submit</h2>
+            <h2 className="text-lg font-medium text-gray-900">Auto Configuration</h2>
+            <p className="text-sm text-gray-600">Your WordPress will be configured with the best settings</p>
+
+            <div className="bg-green-50 p-6 rounded-lg">
+              <div className="flex items-center">
+                <svg className="w-6 h-6 text-green-600 mr-3" fill="none" stroke="currentColor" viewBox="0 0 24 24">
+                  <path
+                    strokeLinecap="round"
+                    strokeLinejoin="round"
+                    strokeWidth={2}
+                    d="M9 12l2 2 4-4m6 2a9 9 0 11-18 0 9 9 0 0118 0z"
+                  />
+                </svg>
+                <div>
+                  <h3 className="text-lg font-medium text-green-900">Everything Ready!</h3>
+                  <p className="text-green-700">Your site will be installed with the following settings:</p>
+                </div>
+              </div>
+
+              <div className="mt-4 grid grid-cols-1 md:grid-cols-2 gap-4 text-sm">
+                <div className="space-y-2">
+                  <p className="text-green-800">🚀 Latest WordPress Version</p>
+                  <p className="text-green-800">🛡️ Automatic HTTPS</p>
+                  <p className="text-green-800">🔒 High Security</p>
+                </div>
+                <div className="space-y-2">
+                  <p className="text-green-800">⚡ Optimized Performance</p>
+                  <p className="text-green-800">📊 Stable MariaDB</p>
+                  <p className="text-green-800">🔄 Automatic Backup</p>
+                </div>
+              </div>
+            </div>
+          </div>
+        )}
+
+        {/* Step 3: Review & Deploy */}
+        {currentStep === 3 && (
+          <div className="space-y-6">
+            <h2 className="text-lg font-medium text-gray-900">Review & Final Confirmation</h2>
+            <p className="text-sm text-gray-600">Please review your entered information</p>
 
             <div className="bg-gray-50 rounded-lg p-6">
-              <h3 className="font-medium text-gray-900 mb-4">Website Configuration Summary</h3>
+              <h3 className="font-medium text-gray-900 mb-4">🚀 Your WordPress is ready to install!</h3>
               <dl className="grid grid-cols-1 gap-4 sm:grid-cols-2">
                 <div>
-                  <dt className="text-sm font-medium text-gray-500">Website ID</dt>
-                  <dd className="text-sm text-gray-900">{formData.websiteId}</dd>
+                  <dt className="text-sm font-medium text-gray-500">Blog Name</dt>
+                  <dd className="text-sm text-gray-900 font-medium">{formData.blogName}</dd>
                 </div>
                 <div>
-                  <dt className="text-sm font-medium text-gray-500">Domain</dt>
-                  <dd className="text-sm text-gray-900">{formData.domain}</dd>
+                  <dt className="text-sm font-medium text-gray-500">Website URL</dt>
+                  <dd className="text-sm text-blue-600 font-medium">https://{formData.subdomain}.naserraoofi.com</dd>
                 </div>
                 <div>
-                  <dt className="text-sm font-medium text-gray-500">Type</dt>
-                  <dd className="text-sm text-gray-900 capitalize">{formData.type}</dd>
-                </div>
-                <div>
-                  <dt className="text-sm font-medium text-gray-500">Plan</dt>
-                  <dd className="text-sm text-gray-900 capitalize">{formData.plan}</dd>
-                </div>
-                <div>
-                  <dt className="text-sm font-medium text-gray-500">Resources</dt>
-                  <dd className="text-sm text-gray-900">
-                    {resourcePlans[formData.plan].cpu} CPU, {resourcePlans[formData.plan].ram} RAM,{" "}
-                    {resourcePlans[formData.plan].storage} Storage
-                  </dd>
-                </div>
-                <div>
-                  <dt className="text-sm font-medium text-gray-500">Database</dt>
-                  <dd className="text-sm text-gray-900 capitalize">{formData.databaseType}</dd>
-                </div>
-                <div>
-                  <dt className="text-sm font-medium text-gray-500">Cluster</dt>
-                  <dd className="text-sm text-gray-900 capitalize">{formData.cluster}</dd>
+                  <dt className="text-sm font-medium text-gray-500">Admin Username</dt>
+                  <dd className="text-sm text-gray-900">{formData.adminUsername}</dd>
                 </div>
                 <div>
                   <dt className="text-sm font-medium text-gray-500">Admin Email</dt>
                   <dd className="text-sm text-gray-900">{formData.adminEmail}</dd>
                 </div>
               </dl>
+
+              <div className="mt-6 p-4 bg-blue-50 rounded-md">
+                <h4 className="text-sm font-medium text-blue-900 mb-2">Auto Configuration:</h4>
+                <ul className="text-xs text-blue-800 space-y-1">
+                  <li>✅ Latest WordPress Version</li>
+                  <li>✅ Optimized MariaDB</li>
+                  <li>✅ Automatic SSL Certificate</li>
+                  <li>✅ Configured Load Balancer</li>
+                  <li>✅ Daily Backup</li>
+                </ul>
+              </div>
             </div>
           </div>
         )}
@@ -354,7 +299,7 @@ export default function CreateWebsitePage() {
             Previous
           </button>
 
-          {currentStep < 4 ? (
+          {currentStep < 3 ? (
             <button
               onClick={nextStep}
               className="px-4 py-2 bg-blue-600 text-white rounded-md text-sm font-medium hover:bg-blue-700"

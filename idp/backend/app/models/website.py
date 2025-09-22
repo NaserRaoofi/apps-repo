@@ -23,25 +23,27 @@ class DatabaseType(str, Enum):
 
 
 class WebsiteCreateRequest(BaseModel):
-    """Request model for creating a new website - matches frontend form."""
+    """Simplified request model for creating a new website."""
 
-    # Step 1: Website Details
-    websiteId: str = Field(
-        ..., min_length=3, max_length=50, description="Unique website identifier"
+    # Simple form fields from frontend
+    adminUsername: str = Field(..., description="WordPress admin username")
+    adminPassword: str = Field(..., description="WordPress admin password")
+    adminEmail: str = Field(..., description="WordPress admin email")
+    blogName: str = Field(..., description="WordPress blog name")
+    subdomain: str = Field(..., description="Subdomain for the website")
+
+    # Auto-generated fields (set by backend)
+    websiteId: Optional[str] = Field(None, description="Auto-generated from subdomain")
+    domain: Optional[str] = Field(None, description="Auto-generated full domain")
+    type: Optional[WebsiteType] = Field(
+        WebsiteType.WORDPRESS, description="Always WordPress"
     )
-    domain: str = Field(..., description="Website domain")
-    type: WebsiteType = Field(..., description="Type of website")
-    cluster: str = Field(..., description="Target cluster")
-
-    # Step 2: Configuration
-    plan: ResourcePlan = Field(..., description="Resource allocation plan")
-    databaseType: DatabaseType = Field(..., description="Database configuration type")
-    storageClass: str = Field(default="gp2", description="Kubernetes storage class")
-
-    # Step 3: Admin Setup
-    adminUsername: str = Field(..., description="Admin username")
-    adminPassword: str = Field(..., description="Admin password")
-    adminEmail: str = Field(..., description="Admin email")
+    cluster: Optional[str] = Field("dev", description="Default cluster")
+    plan: Optional[ResourcePlan] = Field(ResourcePlan.BASIC, description="Default plan")
+    databaseType: Optional[DatabaseType] = Field(
+        DatabaseType.INTERNAL, description="Default database"
+    )
+    storageClass: Optional[str] = Field("gp2", description="Default storage class")
 
     @validator("websiteId")
     def validate_website_id(cls, v):

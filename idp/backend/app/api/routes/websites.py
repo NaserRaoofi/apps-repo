@@ -104,30 +104,42 @@ async def create_website(
 ):
     """Create a new website deployment."""
 
+    # Auto-generate missing fields from simplified frontend data
+    website_id = request.subdomain  # Use subdomain as website ID
+    domain = f"{request.subdomain}.naserraoofi.com"  # Generate full domain
+
+    # Set default values for complex fields
+    website_type = WebsiteTypeEnum.WORDPRESS
+    cluster = "dev"
+    resource_plan = ResourcePlanEnum.BASIC
+    database_type = DatabaseTypeEnum.INTERNAL
+    storage_class = "gp2"
+
     # Check if website_id already exists
     existing_website = (
-        db.query(Website).filter(Website.website_id == request.websiteId).first()
+        db.query(Website).filter(Website.website_id == website_id).first()
     )
     if existing_website:
         raise HTTPException(
             status_code=400,
-            detail=f"Website with ID '{request.websiteId}' already exists",
+            detail=f"Website with ID '{website_id}' already exists",
         )
 
     # Create new website record
     website = Website(
-        website_id=request.websiteId,
-        domain=request.domain,
-        website_type=WebsiteTypeEnum(request.type),
-        cluster=request.cluster,
-        resource_plan=ResourcePlanEnum(request.plan),
-        database_type=DatabaseTypeEnum(request.databaseType),
-        storage_class=request.storageClass,
+        website_id=website_id,
+        domain=domain,
+        website_type=website_type,
+        cluster=cluster,
+        resource_plan=resource_plan,
+        database_type=database_type,
+        storage_class=storage_class,
         admin_username=request.adminUsername,
         admin_password=hash_password(request.adminPassword),
         admin_email=request.adminEmail,
+        blog_name=request.blogName,
         status=WebsiteStatusEnum.PENDING,
-        namespace=f"{request.cluster}-{request.websiteId}",
+        namespace=f"{cluster}-{website_id}",
     )
 
     # Save to database
@@ -141,9 +153,9 @@ async def create_website(
         id=job_id,
         job_type="website_create",
         status="pending",
-        website_id=request.websiteId,
+        website_id=website_id,
         progress=0,
-        logs=[f"Website '{request.websiteId}' created in database"],
+        logs=[f"Website '{website_id}' created in database"],
         created_at=datetime.utcnow(),
     )
 
