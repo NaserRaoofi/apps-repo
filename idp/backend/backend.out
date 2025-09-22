@@ -891,3 +891,243 @@ INFO:     Waiting for application startup.
 2025-09-22 21:54:17,984 INFO sqlalchemy.engine.Engine [raw sql] ()
 2025-09-22 21:54:17,986 INFO sqlalchemy.engine.Engine COMMIT
 INFO:     Application startup complete.
+INFO:     127.0.0.1:43614 - "OPTIONS /api/v1/websites/ HTTP/1.1" 200 OK
+2025-09-22 22:01:26,429 INFO sqlalchemy.engine.Engine BEGIN (implicit)
+2025-09-22 22:01:26,451 INFO sqlalchemy.engine.Engine SELECT websites.id AS websites_id, websites.website_id AS websites_website_id, websites.domain AS websites_domain, websites.website_type AS websites_website_type, websites.cluster AS websites_cluster, websites.resource_plan AS websites_resource_plan, websites.database_type AS websites_database_type, websites.storage_class AS websites_storage_class, websites.admin_username AS websites_admin_username, websites.admin_password AS websites_admin_password, websites.admin_email AS websites_admin_email, websites.blog_name AS websites_blog_name, websites.status AS websites_status, websites.created_at AS websites_created_at, websites.updated_at AS websites_updated_at, websites.deployed_at AS websites_deployed_at, websites.description AS websites_description, websites.namespace AS websites_namespace, websites.ingress_url AS websites_ingress_url 
+FROM websites 
+WHERE websites.website_id = ?
+ LIMIT ? OFFSET ?
+2025-09-22 22:01:26,452 INFO sqlalchemy.engine.Engine [generated in 0.00139s] ('sirwanahmad', 1, 0)
+2025-09-22 22:01:26,460 INFO sqlalchemy.engine.Engine INSERT INTO websites (website_id, domain, website_type, cluster, resource_plan, database_type, storage_class, admin_username, admin_password, admin_email, blog_name, status, updated_at, deployed_at, description, namespace, ingress_url) VALUES (?, ?, ?, ?, ?, ?, ?, ?, ?, ?, ?, ?, ?, ?, ?, ?, ?) RETURNING id, created_at
+2025-09-22 22:01:26,461 INFO sqlalchemy.engine.Engine [generated in 0.00089s] ('sirwanahmad', 'sirwanahmad.naserraoofi.com', 'WORDPRESS', 'dev', 'BASIC', 'INTERNAL', 'gp2', '', 'e3b0c44298fc1c149afbf4c8996fb92427ae41e4649b934ca495991b7852b855', 'saman', 'ahmad', 'PENDING', None, None, None, 'dev-sirwanahmad', None)
+2025-09-22 22:01:26,463 INFO sqlalchemy.engine.Engine COMMIT
+2025-09-22 22:01:26,471 INFO sqlalchemy.engine.Engine BEGIN (implicit)
+2025-09-22 22:01:26,473 INFO sqlalchemy.engine.Engine SELECT websites.id, websites.website_id, websites.domain, websites.website_type, websites.cluster, websites.resource_plan, websites.database_type, websites.storage_class, websites.admin_username, websites.admin_password, websites.admin_email, websites.blog_name, websites.status, websites.created_at, websites.updated_at, websites.deployed_at, websites.description, websites.namespace, websites.ingress_url 
+FROM websites 
+WHERE websites.id = ?
+2025-09-22 22:01:26,473 INFO sqlalchemy.engine.Engine [generated in 0.00039s] (9,)
+2025-09-22 22:01:26,475 INFO sqlalchemy.engine.Engine ROLLBACK
+INFO:     127.0.0.1:43614 - "POST /api/v1/websites/ HTTP/1.1" 200 OK
+2025-09-22 22:01:26,477 INFO sqlalchemy.engine.Engine BEGIN (implicit)
+2025-09-22 22:01:26,478 INFO sqlalchemy.engine.Engine SELECT websites.id AS websites_id, websites.website_id AS websites_website_id, websites.domain AS websites_domain, websites.website_type AS websites_website_type, websites.cluster AS websites_cluster, websites.resource_plan AS websites_resource_plan, websites.database_type AS websites_database_type, websites.storage_class AS websites_storage_class, websites.admin_username AS websites_admin_username, websites.admin_password AS websites_admin_password, websites.admin_email AS websites_admin_email, websites.blog_name AS websites_blog_name, websites.status AS websites_status, websites.created_at AS websites_created_at, websites.updated_at AS websites_updated_at, websites.deployed_at AS websites_deployed_at, websites.description AS websites_description, websites.namespace AS websites_namespace, websites.ingress_url AS websites_ingress_url 
+FROM websites 
+WHERE websites.id = ?
+ LIMIT ? OFFSET ?
+2025-09-22 22:01:26,478 INFO sqlalchemy.engine.Engine [generated in 0.00026s] (9, 1, 0)
+2025-09-22 22:01:26,482 INFO sqlalchemy.engine.Engine UPDATE websites SET status=?, updated_at=CURRENT_TIMESTAMP WHERE websites.id = ?
+2025-09-22 22:01:26,482 INFO sqlalchemy.engine.Engine [generated in 0.00033s] ('CREATING', 9)
+2025-09-22 22:01:26,483 INFO sqlalchemy.engine.Engine COMMIT
+2025-09-22 22:01:26,490 INFO sqlalchemy.engine.Engine BEGIN (implicit)
+2025-09-22 22:01:26,491 INFO sqlalchemy.engine.Engine SELECT websites.id AS websites_id, websites.website_id AS websites_website_id, websites.domain AS websites_domain, websites.website_type AS websites_website_type, websites.cluster AS websites_cluster, websites.resource_plan AS websites_resource_plan, websites.database_type AS websites_database_type, websites.storage_class AS websites_storage_class, websites.admin_username AS websites_admin_username, websites.admin_password AS websites_admin_password, websites.admin_email AS websites_admin_email, websites.blog_name AS websites_blog_name, websites.status AS websites_status, websites.created_at AS websites_created_at, websites.updated_at AS websites_updated_at, websites.deployed_at AS websites_deployed_at, websites.description AS websites_description, websites.namespace AS websites_namespace, websites.ingress_url AS websites_ingress_url 
+FROM websites 
+WHERE websites.id = ?
+2025-09-22 22:01:26,491 INFO sqlalchemy.engine.Engine [generated in 0.00034s] (9,)
+Generated Helm values file: /home/sirwan/apps-repo/idp/backend/website-template/values/values-sirwanahmad.yaml
+✅ Successfully pushed to GitHub: Successfully pushed created values for sirwanahmad to GitHub
+2025-09-22 22:01:28,554 INFO sqlalchemy.engine.Engine UPDATE websites SET status=?, updated_at=CURRENT_TIMESTAMP, deployed_at=?, ingress_url=? WHERE websites.id = ?
+2025-09-22 22:01:28,554 INFO sqlalchemy.engine.Engine [generated in 0.00091s] ('RUNNING', '2025-09-22 21:01:28.551557', 'https://sirwanahmad.naserraoofi.com', 9)
+2025-09-22 22:01:28,556 INFO sqlalchemy.engine.Engine COMMIT
+WARNING:  WatchFiles detected changes in 'app/services/github_service.py'. Reloading...
+INFO:     Shutting down
+INFO:     Waiting for application shutdown.
+INFO:     Application shutdown complete.
+INFO:     Finished server process [381081]
+INFO:     Started server process [416811]
+INFO:     Waiting for application startup.
+2025-09-22 23:05:53,606 INFO sqlalchemy.engine.Engine BEGIN (implicit)
+2025-09-22 23:05:53,607 INFO sqlalchemy.engine.Engine PRAGMA main.table_info("websites")
+2025-09-22 23:05:53,607 INFO sqlalchemy.engine.Engine [raw sql] ()
+2025-09-22 23:05:53,609 INFO sqlalchemy.engine.Engine COMMIT
+INFO:     Application startup complete.
+WARNING:  WatchFiles detected changes in 'app/services/github_service.py'. Reloading...
+INFO:     Shutting down
+INFO:     Waiting for application shutdown.
+INFO:     Application shutdown complete.
+INFO:     Finished server process [416811]
+INFO:     Started server process [416907]
+INFO:     Waiting for application startup.
+2025-09-22 23:06:01,322 INFO sqlalchemy.engine.Engine BEGIN (implicit)
+2025-09-22 23:06:01,323 INFO sqlalchemy.engine.Engine PRAGMA main.table_info("websites")
+2025-09-22 23:06:01,323 INFO sqlalchemy.engine.Engine [raw sql] ()
+2025-09-22 23:06:01,325 INFO sqlalchemy.engine.Engine COMMIT
+INFO:     Application startup complete.
+WARNING:  WatchFiles detected changes in 'app/main.py'. Reloading...
+INFO:     Shutting down
+INFO:     Waiting for application shutdown.
+INFO:     Application shutdown complete.
+INFO:     Finished server process [416907]
+INFO:     Started server process [417166]
+INFO:     Waiting for application startup.
+2025-09-22 23:06:07,029 INFO sqlalchemy.engine.Engine BEGIN (implicit)
+2025-09-22 23:06:07,030 INFO sqlalchemy.engine.Engine PRAGMA main.table_info("websites")
+2025-09-22 23:06:07,030 INFO sqlalchemy.engine.Engine [raw sql] ()
+2025-09-22 23:06:07,031 INFO sqlalchemy.engine.Engine COMMIT
+INFO:     Application startup complete.
+WARNING:  WatchFiles detected changes in 'app/main.py'. Reloading...
+INFO:     Shutting down
+INFO:     Waiting for application shutdown.
+INFO:     Application shutdown complete.
+INFO:     Finished server process [417166]
+INFO:     Started server process [417223]
+INFO:     Waiting for application startup.
+2025-09-22 23:06:12,664 INFO sqlalchemy.engine.Engine BEGIN (implicit)
+2025-09-22 23:06:12,664 INFO sqlalchemy.engine.Engine PRAGMA main.table_info("websites")
+2025-09-22 23:06:12,665 INFO sqlalchemy.engine.Engine [raw sql] ()
+2025-09-22 23:06:12,665 INFO sqlalchemy.engine.Engine COMMIT
+INFO:     Application startup complete.
+WARNING:  WatchFiles detected changes in 'app/main.py'. Reloading...
+INFO:     Shutting down
+INFO:     Waiting for application shutdown.
+INFO:     Application shutdown complete.
+INFO:     Finished server process [417223]
+WARNING:  WatchFiles detected changes in 'app/services/github_service.py'. Reloading...
+INFO:     Started server process [417311]
+INFO:     Waiting for application startup.
+2025-09-22 23:06:24,631 INFO sqlalchemy.engine.Engine BEGIN (implicit)
+2025-09-22 23:06:24,632 INFO sqlalchemy.engine.Engine PRAGMA main.table_info("websites")
+2025-09-22 23:06:24,632 INFO sqlalchemy.engine.Engine [raw sql] ()
+2025-09-22 23:06:24,633 INFO sqlalchemy.engine.Engine COMMIT
+INFO:     Application startup complete.
+WARNING:  WatchFiles detected changes in 'app/services/github_service.py'. Reloading...
+INFO:     Shutting down
+INFO:     Waiting for application shutdown.
+INFO:     Application shutdown complete.
+INFO:     Finished server process [417311]
+Process SpawnProcess-43:
+Traceback (most recent call last):
+  File "/usr/lib/python3.13/multiprocessing/process.py", line 313, in _bootstrap
+    self.run()
+    ~~~~~~~~^^
+  File "/usr/lib/python3.13/multiprocessing/process.py", line 108, in run
+    self._target(*self._args, **self._kwargs)
+    ~~~~~~~~~~~~^^^^^^^^^^^^^^^^^^^^^^^^^^^^^
+  File "/home/sirwan/apps-repo/.venv/lib/python3.13/site-packages/uvicorn/_subprocess.py", line 80, in subprocess_started
+    target(sockets=sockets)
+    ~~~~~~^^^^^^^^^^^^^^^^^
+  File "/home/sirwan/apps-repo/.venv/lib/python3.13/site-packages/uvicorn/server.py", line 67, in run
+    return asyncio_run(self.serve(sockets=sockets), loop_factory=self.config.get_loop_factory())
+  File "/usr/lib/python3.13/asyncio/runners.py", line 195, in run
+    return runner.run(main)
+           ~~~~~~~~~~^^^^^^
+  File "/usr/lib/python3.13/asyncio/runners.py", line 118, in run
+    return self._loop.run_until_complete(task)
+           ~~~~~~~~~~~~~~~~~~~~~~~~~~~~~^^^^^^
+  File "uvloop/loop.pyx", line 1518, in uvloop.loop.Loop.run_until_complete
+  File "/home/sirwan/apps-repo/.venv/lib/python3.13/site-packages/uvicorn/server.py", line 71, in serve
+    await self._serve(sockets)
+  File "/home/sirwan/apps-repo/.venv/lib/python3.13/site-packages/uvicorn/server.py", line 78, in _serve
+    config.load()
+    ~~~~~~~~~~~^^
+  File "/home/sirwan/apps-repo/.venv/lib/python3.13/site-packages/uvicorn/config.py", line 436, in load
+    self.loaded_app = import_from_string(self.app)
+                      ~~~~~~~~~~~~~~~~~~^^^^^^^^^^
+  File "/home/sirwan/apps-repo/.venv/lib/python3.13/site-packages/uvicorn/importer.py", line 19, in import_from_string
+    module = importlib.import_module(module_str)
+  File "/usr/lib/python3.13/importlib/__init__.py", line 88, in import_module
+    return _bootstrap._gcd_import(name[level:], package, level)
+           ~~~~~~~~~~~~~~~~~~~~~~^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^
+  File "<frozen importlib._bootstrap>", line 1387, in _gcd_import
+  File "<frozen importlib._bootstrap>", line 1360, in _find_and_load
+  File "<frozen importlib._bootstrap>", line 1331, in _find_and_load_unlocked
+  File "<frozen importlib._bootstrap>", line 935, in _load_unlocked
+  File "<frozen importlib._bootstrap_external>", line 1026, in exec_module
+  File "<frozen importlib._bootstrap>", line 488, in _call_with_frames_removed
+  File "/home/sirwan/apps-repo/idp/backend/app/main.py", line 2, in <module>
+    from app.api.routes import health, jobs, websites
+  File "/home/sirwan/apps-repo/idp/backend/app/api/routes/websites.py", line 23, in <module>
+    from app.services.github_service import github_service
+  File "/home/sirwan/apps-repo/idp/backend/app/services/github_service.py", line 85
+    return success, output
+IndentationError: unexpected indent
+WARNING:  WatchFiles detected changes in 'app/services/github_service.py'. Reloading...
+Process SpawnProcess-44:
+Traceback (most recent call last):
+  File "/usr/lib/python3.13/multiprocessing/process.py", line 313, in _bootstrap
+    self.run()
+    ~~~~~~~~^^
+  File "/usr/lib/python3.13/multiprocessing/process.py", line 108, in run
+    self._target(*self._args, **self._kwargs)
+    ~~~~~~~~~~~~^^^^^^^^^^^^^^^^^^^^^^^^^^^^^
+  File "/home/sirwan/apps-repo/.venv/lib/python3.13/site-packages/uvicorn/_subprocess.py", line 80, in subprocess_started
+    target(sockets=sockets)
+    ~~~~~~^^^^^^^^^^^^^^^^^
+  File "/home/sirwan/apps-repo/.venv/lib/python3.13/site-packages/uvicorn/server.py", line 67, in run
+    return asyncio_run(self.serve(sockets=sockets), loop_factory=self.config.get_loop_factory())
+  File "/usr/lib/python3.13/asyncio/runners.py", line 195, in run
+    return runner.run(main)
+           ~~~~~~~~~~^^^^^^
+  File "/usr/lib/python3.13/asyncio/runners.py", line 118, in run
+    return self._loop.run_until_complete(task)
+           ~~~~~~~~~~~~~~~~~~~~~~~~~~~~~^^^^^^
+  File "uvloop/loop.pyx", line 1518, in uvloop.loop.Loop.run_until_complete
+  File "/home/sirwan/apps-repo/.venv/lib/python3.13/site-packages/uvicorn/server.py", line 71, in serve
+    await self._serve(sockets)
+  File "/home/sirwan/apps-repo/.venv/lib/python3.13/site-packages/uvicorn/server.py", line 78, in _serve
+    config.load()
+    ~~~~~~~~~~~^^
+  File "/home/sirwan/apps-repo/.venv/lib/python3.13/site-packages/uvicorn/config.py", line 436, in load
+    self.loaded_app = import_from_string(self.app)
+                      ~~~~~~~~~~~~~~~~~~^^^^^^^^^^
+  File "/home/sirwan/apps-repo/.venv/lib/python3.13/site-packages/uvicorn/importer.py", line 19, in import_from_string
+    module = importlib.import_module(module_str)
+  File "/usr/lib/python3.13/importlib/__init__.py", line 88, in import_module
+    return _bootstrap._gcd_import(name[level:], package, level)
+           ~~~~~~~~~~~~~~~~~~~~~~^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^
+  File "<frozen importlib._bootstrap>", line 1387, in _gcd_import
+  File "<frozen importlib._bootstrap>", line 1360, in _find_and_load
+  File "<frozen importlib._bootstrap>", line 1331, in _find_and_load_unlocked
+  File "<frozen importlib._bootstrap>", line 935, in _load_unlocked
+  File "<frozen importlib._bootstrap_external>", line 1026, in exec_module
+  File "<frozen importlib._bootstrap>", line 488, in _call_with_frames_removed
+  File "/home/sirwan/apps-repo/idp/backend/app/main.py", line 2, in <module>
+    from app.api.routes import health, jobs, websites
+  File "/home/sirwan/apps-repo/idp/backend/app/api/routes/websites.py", line 23, in <module>
+    from app.services.github_service import github_service
+  File "/home/sirwan/apps-repo/idp/backend/app/services/github_service.py", line 326
+    "[GitHubService] Auto-push failed for '"
+    ^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^
+SyntaxError: invalid syntax. Perhaps you forgot a comma?
+WARNING:  WatchFiles detected changes in 'app/services/github_service.py'. Reloading...
+INFO:     Started server process [419198]
+INFO:     Waiting for application startup.
+2025-09-22 23:09:30,181 INFO sqlalchemy.engine.Engine BEGIN (implicit)
+2025-09-22 23:09:30,181 INFO sqlalchemy.engine.Engine PRAGMA main.table_info("websites")
+2025-09-22 23:09:30,181 INFO sqlalchemy.engine.Engine [raw sql] ()
+2025-09-22 23:09:30,183 INFO sqlalchemy.engine.Engine COMMIT
+INFO:     Application startup complete.
+WARNING:  WatchFiles detected changes in 'app/services/github_service.py'. Reloading...
+INFO:     Shutting down
+INFO:     Waiting for application shutdown.
+INFO:     Application shutdown complete.
+INFO:     Finished server process [419198]
+INFO:     Started server process [419267]
+INFO:     Waiting for application startup.
+2025-09-22 23:09:38,135 INFO sqlalchemy.engine.Engine BEGIN (implicit)
+2025-09-22 23:09:38,136 INFO sqlalchemy.engine.Engine PRAGMA main.table_info("websites")
+2025-09-22 23:09:38,137 INFO sqlalchemy.engine.Engine [raw sql] ()
+2025-09-22 23:09:38,139 INFO sqlalchemy.engine.Engine COMMIT
+INFO:     Application startup complete.
+WARNING:  WatchFiles detected changes in 'app/services/github_service.py'. Reloading...
+INFO:     Shutting down
+INFO:     Waiting for application shutdown.
+INFO:     Application shutdown complete.
+INFO:     Finished server process [419267]
+INFO:     Started server process [419333]
+INFO:     Waiting for application startup.
+2025-09-22 23:09:43,943 INFO sqlalchemy.engine.Engine BEGIN (implicit)
+2025-09-22 23:09:43,943 INFO sqlalchemy.engine.Engine PRAGMA main.table_info("websites")
+2025-09-22 23:09:43,943 INFO sqlalchemy.engine.Engine [raw sql] ()
+2025-09-22 23:09:43,944 INFO sqlalchemy.engine.Engine COMMIT
+INFO:     Application startup complete.
+WARNING:  WatchFiles detected changes in 'app/services/github_service.py'. Reloading...
+INFO:     Shutting down
+INFO:     Waiting for application shutdown.
+INFO:     Application shutdown complete.
+INFO:     Finished server process [419333]
+INFO:     Started server process [419422]
+INFO:     Waiting for application startup.
+2025-09-22 23:09:53,516 INFO sqlalchemy.engine.Engine BEGIN (implicit)
+2025-09-22 23:09:53,516 INFO sqlalchemy.engine.Engine PRAGMA main.table_info("websites")
+2025-09-22 23:09:53,516 INFO sqlalchemy.engine.Engine [raw sql] ()
+2025-09-22 23:09:53,517 INFO sqlalchemy.engine.Engine COMMIT
+INFO:     Application startup complete.
