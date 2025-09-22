@@ -1,8 +1,15 @@
 """
 GitHub service for automatic repository operations.
 Handles automatic commit and push of generated values files.
+
+Enhancements:
+- Directory watcher that auto-detects new values files.
+- Target branch configurable via ENV IDP_VALUES_BRANCH (default main).
+- Safe push to main using a temporary worktree to avoid merges.
 """
 
+import os
+import shutil
 import subprocess
 import threading
 import time
@@ -22,6 +29,8 @@ class GitHubService:
         self._watcher_thread: threading.Thread | None = None
         self._stop_event = threading.Event()
         self._known_files: set[str] = set()
+        # Branch to push to (default main, override with ENV IDP_VALUES_BRANCH)
+        self.target_branch = os.getenv("IDP_VALUES_BRANCH", "main")
 
     def git_command(self, cmd: List[str]) -> tuple[bool, str]:
         """Execute git command and return success status and output."""
@@ -76,10 +85,120 @@ class GitHubService:
         success, output = self.git_command(["commit", "-m", commit_message])
         return success, output
 
-    def push_to_remote(self, branch: str = "developer") -> tuple[bool, str]:
-        """Push commits to remote repository."""
-        success, output = self.git_command(["push", "origin", branch])
-        return success, output
+    def get_current_branch(self) -> str:
+        success, output = self.git_command(["rev-parse", "--abbrev-ref", "HEAD"])
+        if success:
+            return output.strip()
+        return ""
+
+    def push_to_remote(self, branch: str | None = None) -> tuple[bool, str]:
+        """Push current branch to remote."""
+        target = branch or self.target_branch
+        return self.git_command(["push", "origin", target])
+
+    # --- Safe push to main using worktree ---
+    def _push_values_to_main_worktree(self, website_id: str) -> tuple[bool, str]:
+        """Push only values files to main branch using a temporary worktree.
+
+        This avoids merging the entire developer branch history into main.
+        """
+        temp_dir = self.repo_path / ".git" / "_values_worktree"
+        # Clean up any previous failed attempt
+        if temp_dir.exists():
+            try:
+                shutil.rmtree(temp_dir)
+            except Exception:
+                pass
+
+        # Ensure we have latest main
+        fetch_ok, _ = self.git_command(["fetch", "origin", "main"])
+        if not fetch_ok:
+            return False, "Failed to fetch origin/main"
+
+        # Add worktree tracking origin/main (detached) with temp branch
+        add_ok, add_out = self.git_command(
+            [
+                "worktree",
+                "add",
+                str(temp_dir),
+                "-b",
+                "_values_main_tmp",
+                "origin/main",
+            ]
+        )
+        if not add_ok:
+            return False, f"Failed to add worktree: {add_out}"
+
+        try:
+            # Copy values files into worktree
+            target_values_dir = (
+                temp_dir / "idp" / "backend" / "website-template" / "values"
+            )
+            target_values_dir.mkdir(parents=True, exist_ok=True)
+            for yf in self.values_dir.glob("values-*.yaml"):
+                shutil.copy2(yf, target_values_dir / yf.name)
+
+            # Stage only values files
+            add_values_ok, add_values_out = self.git_command(
+                [
+                    "-C",
+                    str(temp_dir),
+                    "add",
+                    "idp/backend/website-template/values/values-*.yaml",
+                ]
+            )
+            if not add_values_ok:
+                return False, f"Worktree add failed: {add_values_out}"
+
+            # Check if there is anything to commit
+            status_ok, status_out = self.git_command(
+                [
+                    "-C",
+                    str(temp_dir),
+                    "status",
+                    "--porcelain",
+                ]
+            )
+            if not status_ok:
+                return False, "Worktree status failed"
+            if not status_out.strip():
+                return True, "No changes to commit on main"
+
+            # Commit
+            ts = datetime.utcnow().strftime("%Y-%m-%d %H:%M:%S")
+            commit_ok, commit_out = self.git_command(
+                [
+                    "-C",
+                    str(temp_dir),
+                    "commit",
+                    "-m",
+                    (
+                        "feat(values): add/update WordPress values for "
+                        f"{website_id}\n\nWorktree commit at {ts}"
+                    ),
+                ]
+            )
+            if not commit_ok:
+                return False, f"Worktree commit failed: {commit_out}"
+
+            # Push to main
+            push_ok, push_out = self.git_command(
+                [
+                    "-C",
+                    str(temp_dir),
+                    "push",
+                    "origin",
+                    "HEAD:main",
+                ]
+            )
+            if not push_ok:
+                return False, f"Worktree push failed: {push_out}"
+            return True, "Pushed values to main via worktree"
+        finally:
+            # Remove worktree (force to avoid lingering)
+            self.git_command(["worktree", "remove", "-f", str(temp_dir)])
+            # Delete temp branch ref if created
+            self.git_command(["branch", "-D", "_values_main_tmp"])  # cleanup
 
     def auto_push_values(self, website_id: str, action: str = "created") -> dict:
         """
@@ -127,8 +246,12 @@ class GitHubService:
             result["message"] = f"Failed to commit changes: {commit_output}"
             return result
 
-        # Step 4: Push to remote
-        push_success, push_output = self.push_to_remote()
+        # Step 4: Push to target branch (special handling if target is main)
+        current_branch = self.get_current_branch()
+        if self.target_branch == "main" and current_branch != "main":
+            push_success, push_output = self._push_values_to_main_worktree(website_id)
+        else:
+            push_success, push_output = self.push_to_remote()
         result["steps"]["push"] = {
             "success": push_success,
             "output": push_output,
