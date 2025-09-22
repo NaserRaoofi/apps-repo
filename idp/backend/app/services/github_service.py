@@ -4,6 +4,8 @@ Handles automatic commit and push of generated values files.
 """
 
 import subprocess
+import threading
+import time
 from datetime import datetime
 from pathlib import Path
 from typing import List
@@ -14,6 +16,12 @@ class GitHubService:
 
     def __init__(self, repo_path: str = "/home/sirwan/apps-repo"):
         self.repo_path = Path(repo_path)
+        self.values_dir = (
+            self.repo_path / "idp" / "backend" / "website-template" / "values"
+        )
+        self._watcher_thread: threading.Thread | None = None
+        self._stop_event = threading.Event()
+        self._known_files: set[str] = set()
 
     def git_command(self, cmd: List[str]) -> tuple[bool, str]:
         """Execute git command and return success status and output."""
@@ -152,6 +160,71 @@ class GitHubService:
                 return False, f"Failed to set git config: {output}"
 
         return True, "Git configuration completed successfully"
+
+    # --- Directory Watcher Logic ---
+    def _scan_values_dir(self) -> list[str]:
+        """Return list of current values yaml files."""
+        if not self.values_dir.exists():
+            return []
+        return [f.name for f in self.values_dir.glob("values-*.yaml") if f.is_file()]
+
+    def _detect_new_files(self) -> list[str]:
+        """Detect newly created values files since last scan."""
+        current = set(self._scan_values_dir())
+        new_files = [f for f in current if f not in self._known_files]
+        self._known_files = current
+        return new_files
+
+    def _watch_loop(self, interval: float = 2.0):
+        """Poll directory for new values files and auto push them."""
+        print("[GitHubService] Watcher started for values directory")
+        # Initialize known files on start
+        self._known_files = set(self._scan_values_dir())
+        while not self._stop_event.is_set():
+            try:
+                new_files = self._detect_new_files()
+                if new_files:
+                    for filename in new_files:
+                        website_id = filename.removeprefix("values-").removesuffix(
+                            ".yaml"
+                        )
+                        print(
+                            "[GitHubService] Detected new values file '"
+                            f"{filename}' pushing to repo..."
+                        )
+                        push_result = self.auto_push_values(website_id, "created")
+                        if push_result.get("success"):
+                            print(
+                                "[GitHubService] Auto-push success for '"
+                                f"{website_id}': {push_result.get('message')}"
+                            )
+                        else:
+                            print(
+                                "[GitHubService] Auto-push failed for '"
+                                f"{website_id}': {push_result.get('message')}"
+                            )
+            except Exception as e:
+                print(f"[GitHubService] Watcher error: {e}")
+            time.sleep(interval)
+        print("[GitHubService] Watcher stopped")
+
+    def start_watcher(self):
+        """Start the background watcher thread if not already running."""
+        if self._watcher_thread and self._watcher_thread.is_alive():
+            return
+        self._stop_event.clear()
+        self._watcher_thread = threading.Thread(
+            target=self._watch_loop, name="values-dir-watcher", daemon=True
+        )
+        self._watcher_thread.start()
+
+    def stop_watcher(self):
+        """Stop the background watcher thread."""
+        if not self._watcher_thread:
+            return
+        self._stop_event.set()
+        self._watcher_thread.join(timeout=5)
+        self._watcher_thread = None
 
 
 # Create singleton instance
