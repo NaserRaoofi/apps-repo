@@ -1,0 +1,893 @@
+nohup: ignoring input
+INFO:     Will watch for changes in these directories: ['/home/sirwan/apps-repo/idp/backend']
+INFO:     Uvicorn running on http://0.0.0.0:8001 (Press CTRL+C to quit)
+INFO:     Started reloader process [127465] using WatchFiles
+INFO:     Started server process [127470]
+INFO:     Waiting for application startup.
+2025-09-22 13:24:59,494 INFO sqlalchemy.engine.Engine BEGIN (implicit)
+2025-09-22 13:24:59,494 INFO sqlalchemy.engine.Engine PRAGMA main.table_info("websites")
+2025-09-22 13:24:59,494 INFO sqlalchemy.engine.Engine [raw sql] ()
+2025-09-22 13:24:59,495 INFO sqlalchemy.engine.Engine COMMIT
+INFO:     Application startup complete.
+INFO:     127.0.0.1:37396 - "GET /docs HTTP/1.1" 200 OK
+2025-09-22 13:26:28,464 INFO sqlalchemy.engine.Engine BEGIN (implicit)
+2025-09-22 13:26:28,469 INFO sqlalchemy.engine.Engine SELECT websites.id AS websites_id, websites.website_id AS websites_website_id, websites.domain AS websites_domain, websites.website_type AS websites_website_type, websites.cluster AS websites_cluster, websites.resource_plan AS websites_resource_plan, websites.database_type AS websites_database_type, websites.storage_class AS websites_storage_class, websites.admin_username AS websites_admin_username, websites.admin_password AS websites_admin_password, websites.admin_email AS websites_admin_email, websites.blog_name AS websites_blog_name, websites.status AS websites_status, websites.created_at AS websites_created_at, websites.updated_at AS websites_updated_at, websites.deployed_at AS websites_deployed_at, websites.description AS websites_description, websites.namespace AS websites_namespace, websites.ingress_url AS websites_ingress_url 
+FROM websites 
+WHERE websites.website_id = ?
+ LIMIT ? OFFSET ?
+2025-09-22 13:26:28,470 INFO sqlalchemy.engine.Engine [generated in 0.00043s] ('testblog', 1, 0)
+2025-09-22 13:26:28,474 INFO sqlalchemy.engine.Engine INSERT INTO websites (website_id, domain, website_type, cluster, resource_plan, database_type, storage_class, admin_username, admin_password, admin_email, blog_name, status, updated_at, deployed_at, description, namespace, ingress_url) VALUES (?, ?, ?, ?, ?, ?, ?, ?, ?, ?, ?, ?, ?, ?, ?, ?, ?) RETURNING id, created_at
+2025-09-22 13:26:28,475 INFO sqlalchemy.engine.Engine [generated in 0.00058s] ('testblog', 'testblog.naserraoofi.com', 'WORDPRESS', 'dev', 'BASIC', 'INTERNAL', 'gp2', 'admin', 'ef92b778bafe771e89245b89ecbc08a44a4e166c06659911881f383d4473e94f', 'admin@example.com', 'My Test Blog', 'PENDING', None, None, None, 'dev-testblog', None)
+2025-09-22 13:26:28,476 INFO sqlalchemy.engine.Engine COMMIT
+2025-09-22 13:26:28,493 INFO sqlalchemy.engine.Engine BEGIN (implicit)
+2025-09-22 13:26:28,495 INFO sqlalchemy.engine.Engine SELECT websites.id, websites.website_id, websites.domain, websites.website_type, websites.cluster, websites.resource_plan, websites.database_type, websites.storage_class, websites.admin_username, websites.admin_password, websites.admin_email, websites.blog_name, websites.status, websites.created_at, websites.updated_at, websites.deployed_at, websites.description, websites.namespace, websites.ingress_url 
+FROM websites 
+WHERE websites.id = ?
+2025-09-22 13:26:28,495 INFO sqlalchemy.engine.Engine [generated in 0.00030s] (1,)
+2025-09-22 13:26:28,496 INFO sqlalchemy.engine.Engine ROLLBACK
+INFO:     127.0.0.1:60982 - "POST /api/v1/websites/ HTTP/1.1" 200 OK
+2025-09-22 13:26:28,499 INFO sqlalchemy.engine.Engine BEGIN (implicit)
+2025-09-22 13:26:28,500 INFO sqlalchemy.engine.Engine SELECT websites.id AS websites_id, websites.website_id AS websites_website_id, websites.domain AS websites_domain, websites.website_type AS websites_website_type, websites.cluster AS websites_cluster, websites.resource_plan AS websites_resource_plan, websites.database_type AS websites_database_type, websites.storage_class AS websites_storage_class, websites.admin_username AS websites_admin_username, websites.admin_password AS websites_admin_password, websites.admin_email AS websites_admin_email, websites.blog_name AS websites_blog_name, websites.status AS websites_status, websites.created_at AS websites_created_at, websites.updated_at AS websites_updated_at, websites.deployed_at AS websites_deployed_at, websites.description AS websites_description, websites.namespace AS websites_namespace, websites.ingress_url AS websites_ingress_url 
+FROM websites 
+WHERE websites.id = ?
+ LIMIT ? OFFSET ?
+2025-09-22 13:26:28,500 INFO sqlalchemy.engine.Engine [generated in 0.00022s] (1, 1, 0)
+2025-09-22 13:26:28,503 INFO sqlalchemy.engine.Engine UPDATE websites SET status=?, updated_at=CURRENT_TIMESTAMP WHERE websites.id = ?
+2025-09-22 13:26:28,503 INFO sqlalchemy.engine.Engine [generated in 0.00042s] ('CREATING', 1)
+2025-09-22 13:26:28,506 INFO sqlalchemy.engine.Engine COMMIT
+2025-09-22 13:26:28,512 INFO sqlalchemy.engine.Engine BEGIN (implicit)
+2025-09-22 13:26:28,513 INFO sqlalchemy.engine.Engine SELECT websites.id AS websites_id, websites.website_id AS websites_website_id, websites.domain AS websites_domain, websites.website_type AS websites_website_type, websites.cluster AS websites_cluster, websites.resource_plan AS websites_resource_plan, websites.database_type AS websites_database_type, websites.storage_class AS websites_storage_class, websites.admin_username AS websites_admin_username, websites.admin_password AS websites_admin_password, websites.admin_email AS websites_admin_email, websites.blog_name AS websites_blog_name, websites.status AS websites_status, websites.created_at AS websites_created_at, websites.updated_at AS websites_updated_at, websites.deployed_at AS websites_deployed_at, websites.description AS websites_description, websites.namespace AS websites_namespace, websites.ingress_url AS websites_ingress_url 
+FROM websites 
+WHERE websites.id = ?
+2025-09-22 13:26:28,513 INFO sqlalchemy.engine.Engine [generated in 0.00018s] (1,)
+Generated Helm values file: /home/sirwan/apps-repo/charts/website-template/values/values-testblog.yaml
+2025-09-22 13:26:28,523 INFO sqlalchemy.engine.Engine UPDATE websites SET status=?, updated_at=CURRENT_TIMESTAMP, deployed_at=?, ingress_url=? WHERE websites.id = ?
+2025-09-22 13:26:28,523 INFO sqlalchemy.engine.Engine [generated in 0.00026s] ('RUNNING', '2025-09-22 12:26:28.522235', 'https://testblog.naserraoofi.com', 1)
+2025-09-22 13:26:28,523 INFO sqlalchemy.engine.Engine COMMIT
+INFO:     127.0.0.1:49158 - "OPTIONS /api/v1/websites/ HTTP/1.1" 200 OK
+INFO:     127.0.0.1:49158 - "POST /api/v1/websites/ HTTP/1.1" 422 Unprocessable Content
+INFO:     127.0.0.1:49168 - "POST /api/v1/websites/ HTTP/1.1" 422 Unprocessable Content
+INFO:     127.0.0.1:47666 - "POST /api/v1/websites/ HTTP/1.1" 422 Unprocessable Content
+2025-09-22 13:35:25,193 INFO sqlalchemy.engine.Engine BEGIN (implicit)
+2025-09-22 13:35:25,194 INFO sqlalchemy.engine.Engine SELECT websites.id AS websites_id, websites.website_id AS websites_website_id, websites.domain AS websites_domain, websites.website_type AS websites_website_type, websites.cluster AS websites_cluster, websites.resource_plan AS websites_resource_plan, websites.database_type AS websites_database_type, websites.storage_class AS websites_storage_class, websites.admin_username AS websites_admin_username, websites.admin_password AS websites_admin_password, websites.admin_email AS websites_admin_email, websites.blog_name AS websites_blog_name, websites.status AS websites_status, websites.created_at AS websites_created_at, websites.updated_at AS websites_updated_at, websites.deployed_at AS websites_deployed_at, websites.description AS websites_description, websites.namespace AS websites_namespace, websites.ingress_url AS websites_ingress_url 
+FROM websites 
+WHERE websites.website_id = ?
+ LIMIT ? OFFSET ?
+2025-09-22 13:35:25,194 INFO sqlalchemy.engine.Engine [cached since 536.7s ago] ('demo1', 1, 0)
+2025-09-22 13:35:25,196 INFO sqlalchemy.engine.Engine INSERT INTO websites (website_id, domain, website_type, cluster, resource_plan, database_type, storage_class, admin_username, admin_password, admin_email, blog_name, status, updated_at, deployed_at, description, namespace, ingress_url) VALUES (?, ?, ?, ?, ?, ?, ?, ?, ?, ?, ?, ?, ?, ?, ?, ?, ?) RETURNING id, created_at
+2025-09-22 13:35:25,196 INFO sqlalchemy.engine.Engine [cached since 536.7s ago] ('demo1', 'demo1.naserraoofi.com', 'WORDPRESS', 'dev', 'BASIC', 'INTERNAL', 'gp2', 'admin', 'c63c294a92e253e7f7a3e5417a95e6ae598b68d82d5136d18c8fa9d992474799', 'admin@example.com', 'Demo', 'PENDING', None, None, None, 'dev-demo1', None)
+2025-09-22 13:35:25,196 INFO sqlalchemy.engine.Engine COMMIT
+2025-09-22 13:35:25,208 INFO sqlalchemy.engine.Engine BEGIN (implicit)
+2025-09-22 13:35:25,209 INFO sqlalchemy.engine.Engine SELECT websites.id, websites.website_id, websites.domain, websites.website_type, websites.cluster, websites.resource_plan, websites.database_type, websites.storage_class, websites.admin_username, websites.admin_password, websites.admin_email, websites.blog_name, websites.status, websites.created_at, websites.updated_at, websites.deployed_at, websites.description, websites.namespace, websites.ingress_url 
+FROM websites 
+WHERE websites.id = ?
+2025-09-22 13:35:25,210 INFO sqlalchemy.engine.Engine [cached since 536.7s ago] (2,)
+2025-09-22 13:35:25,211 INFO sqlalchemy.engine.Engine ROLLBACK
+INFO:     127.0.0.1:40008 - "POST /api/v1/websites/ HTTP/1.1" 200 OK
+2025-09-22 13:35:25,212 INFO sqlalchemy.engine.Engine BEGIN (implicit)
+2025-09-22 13:35:25,212 INFO sqlalchemy.engine.Engine SELECT websites.id AS websites_id, websites.website_id AS websites_website_id, websites.domain AS websites_domain, websites.website_type AS websites_website_type, websites.cluster AS websites_cluster, websites.resource_plan AS websites_resource_plan, websites.database_type AS websites_database_type, websites.storage_class AS websites_storage_class, websites.admin_username AS websites_admin_username, websites.admin_password AS websites_admin_password, websites.admin_email AS websites_admin_email, websites.blog_name AS websites_blog_name, websites.status AS websites_status, websites.created_at AS websites_created_at, websites.updated_at AS websites_updated_at, websites.deployed_at AS websites_deployed_at, websites.description AS websites_description, websites.namespace AS websites_namespace, websites.ingress_url AS websites_ingress_url 
+FROM websites 
+WHERE websites.id = ?
+ LIMIT ? OFFSET ?
+2025-09-22 13:35:25,212 INFO sqlalchemy.engine.Engine [cached since 536.7s ago] (2, 1, 0)
+2025-09-22 13:35:25,213 INFO sqlalchemy.engine.Engine UPDATE websites SET status=?, updated_at=CURRENT_TIMESTAMP WHERE websites.id = ?
+2025-09-22 13:35:25,213 INFO sqlalchemy.engine.Engine [cached since 536.7s ago] ('CREATING', 2)
+2025-09-22 13:35:25,214 INFO sqlalchemy.engine.Engine COMMIT
+2025-09-22 13:35:25,220 INFO sqlalchemy.engine.Engine BEGIN (implicit)
+2025-09-22 13:35:25,220 INFO sqlalchemy.engine.Engine SELECT websites.id AS websites_id, websites.website_id AS websites_website_id, websites.domain AS websites_domain, websites.website_type AS websites_website_type, websites.cluster AS websites_cluster, websites.resource_plan AS websites_resource_plan, websites.database_type AS websites_database_type, websites.storage_class AS websites_storage_class, websites.admin_username AS websites_admin_username, websites.admin_password AS websites_admin_password, websites.admin_email AS websites_admin_email, websites.blog_name AS websites_blog_name, websites.status AS websites_status, websites.created_at AS websites_created_at, websites.updated_at AS websites_updated_at, websites.deployed_at AS websites_deployed_at, websites.description AS websites_description, websites.namespace AS websites_namespace, websites.ingress_url AS websites_ingress_url 
+FROM websites 
+WHERE websites.id = ?
+2025-09-22 13:35:25,220 INFO sqlalchemy.engine.Engine [cached since 536.7s ago] (2,)
+Generated Helm values file: /home/sirwan/apps-repo/charts/website-template/values/values-demo1.yaml
+2025-09-22 13:35:25,226 INFO sqlalchemy.engine.Engine UPDATE websites SET status=?, updated_at=CURRENT_TIMESTAMP, deployed_at=?, ingress_url=? WHERE websites.id = ?
+2025-09-22 13:35:25,226 INFO sqlalchemy.engine.Engine [cached since 536.7s ago] ('RUNNING', '2025-09-22 12:35:25.226010', 'https://demo1.naserraoofi.com', 2)
+2025-09-22 13:35:25,227 INFO sqlalchemy.engine.Engine COMMIT
+2025-09-22 13:35:52,310 INFO sqlalchemy.engine.Engine BEGIN (implicit)
+2025-09-22 13:35:52,311 INFO sqlalchemy.engine.Engine SELECT websites.id AS websites_id, websites.website_id AS websites_website_id, websites.domain AS websites_domain, websites.website_type AS websites_website_type, websites.cluster AS websites_cluster, websites.resource_plan AS websites_resource_plan, websites.database_type AS websites_database_type, websites.storage_class AS websites_storage_class, websites.admin_username AS websites_admin_username, websites.admin_password AS websites_admin_password, websites.admin_email AS websites_admin_email, websites.blog_name AS websites_blog_name, websites.status AS websites_status, websites.created_at AS websites_created_at, websites.updated_at AS websites_updated_at, websites.deployed_at AS websites_deployed_at, websites.description AS websites_description, websites.namespace AS websites_namespace, websites.ingress_url AS websites_ingress_url 
+FROM websites 
+WHERE websites.website_id = ?
+ LIMIT ? OFFSET ?
+2025-09-22 13:35:52,311 INFO sqlalchemy.engine.Engine [cached since 563.8s ago] ('paris', 1, 0)
+2025-09-22 13:35:52,312 INFO sqlalchemy.engine.Engine INSERT INTO websites (website_id, domain, website_type, cluster, resource_plan, database_type, storage_class, admin_username, admin_password, admin_email, blog_name, status, updated_at, deployed_at, description, namespace, ingress_url) VALUES (?, ?, ?, ?, ?, ?, ?, ?, ?, ?, ?, ?, ?, ?, ?, ?, ?) RETURNING id, created_at
+2025-09-22 13:35:52,312 INFO sqlalchemy.engine.Engine [cached since 563.8s ago] ('paris', 'paris.naserraoofi.com', 'WORDPRESS', 'dev', 'BASIC', 'INTERNAL', 'gp2', '', 'e3b0c44298fc1c149afbf4c8996fb92427ae41e4649b934ca495991b7852b855', 'sirwan@gmail.com', 'paris', 'PENDING', None, None, None, 'dev-paris', None)
+2025-09-22 13:35:52,313 INFO sqlalchemy.engine.Engine COMMIT
+2025-09-22 13:35:52,326 INFO sqlalchemy.engine.Engine BEGIN (implicit)
+2025-09-22 13:35:52,326 INFO sqlalchemy.engine.Engine SELECT websites.id, websites.website_id, websites.domain, websites.website_type, websites.cluster, websites.resource_plan, websites.database_type, websites.storage_class, websites.admin_username, websites.admin_password, websites.admin_email, websites.blog_name, websites.status, websites.created_at, websites.updated_at, websites.deployed_at, websites.description, websites.namespace, websites.ingress_url 
+FROM websites 
+WHERE websites.id = ?
+2025-09-22 13:35:52,326 INFO sqlalchemy.engine.Engine [cached since 563.8s ago] (3,)
+2025-09-22 13:35:52,327 INFO sqlalchemy.engine.Engine ROLLBACK
+INFO:     127.0.0.1:36856 - "POST /api/v1/websites/ HTTP/1.1" 200 OK
+2025-09-22 13:35:52,328 INFO sqlalchemy.engine.Engine BEGIN (implicit)
+2025-09-22 13:35:52,328 INFO sqlalchemy.engine.Engine SELECT websites.id AS websites_id, websites.website_id AS websites_website_id, websites.domain AS websites_domain, websites.website_type AS websites_website_type, websites.cluster AS websites_cluster, websites.resource_plan AS websites_resource_plan, websites.database_type AS websites_database_type, websites.storage_class AS websites_storage_class, websites.admin_username AS websites_admin_username, websites.admin_password AS websites_admin_password, websites.admin_email AS websites_admin_email, websites.blog_name AS websites_blog_name, websites.status AS websites_status, websites.created_at AS websites_created_at, websites.updated_at AS websites_updated_at, websites.deployed_at AS websites_deployed_at, websites.description AS websites_description, websites.namespace AS websites_namespace, websites.ingress_url AS websites_ingress_url 
+FROM websites 
+WHERE websites.id = ?
+ LIMIT ? OFFSET ?
+2025-09-22 13:35:52,328 INFO sqlalchemy.engine.Engine [cached since 563.8s ago] (3, 1, 0)
+2025-09-22 13:35:52,329 INFO sqlalchemy.engine.Engine UPDATE websites SET status=?, updated_at=CURRENT_TIMESTAMP WHERE websites.id = ?
+2025-09-22 13:35:52,329 INFO sqlalchemy.engine.Engine [cached since 563.8s ago] ('CREATING', 3)
+2025-09-22 13:35:52,330 INFO sqlalchemy.engine.Engine COMMIT
+2025-09-22 13:35:52,336 INFO sqlalchemy.engine.Engine BEGIN (implicit)
+2025-09-22 13:35:52,336 INFO sqlalchemy.engine.Engine SELECT websites.id AS websites_id, websites.website_id AS websites_website_id, websites.domain AS websites_domain, websites.website_type AS websites_website_type, websites.cluster AS websites_cluster, websites.resource_plan AS websites_resource_plan, websites.database_type AS websites_database_type, websites.storage_class AS websites_storage_class, websites.admin_username AS websites_admin_username, websites.admin_password AS websites_admin_password, websites.admin_email AS websites_admin_email, websites.blog_name AS websites_blog_name, websites.status AS websites_status, websites.created_at AS websites_created_at, websites.updated_at AS websites_updated_at, websites.deployed_at AS websites_deployed_at, websites.description AS websites_description, websites.namespace AS websites_namespace, websites.ingress_url AS websites_ingress_url 
+FROM websites 
+WHERE websites.id = ?
+2025-09-22 13:35:52,336 INFO sqlalchemy.engine.Engine [cached since 563.8s ago] (3,)
+Generated Helm values file: /home/sirwan/apps-repo/charts/website-template/values/values-paris.yaml
+2025-09-22 13:35:52,340 INFO sqlalchemy.engine.Engine UPDATE websites SET status=?, updated_at=CURRENT_TIMESTAMP, deployed_at=?, ingress_url=? WHERE websites.id = ?
+2025-09-22 13:35:52,340 INFO sqlalchemy.engine.Engine [cached since 563.8s ago] ('RUNNING', '2025-09-22 12:35:52.339746', 'https://paris.naserraoofi.com', 3)
+2025-09-22 13:35:52,340 INFO sqlalchemy.engine.Engine COMMIT
+INFO:     127.0.0.1:40280 - "OPTIONS /api/v1/websites/ HTTP/1.1" 200 OK
+2025-09-22 13:36:57,521 INFO sqlalchemy.engine.Engine BEGIN (implicit)
+2025-09-22 13:36:57,526 INFO sqlalchemy.engine.Engine SELECT websites.id AS websites_id, websites.website_id AS websites_website_id, websites.domain AS websites_domain, websites.website_type AS websites_website_type, websites.cluster AS websites_cluster, websites.resource_plan AS websites_resource_plan, websites.database_type AS websites_database_type, websites.storage_class AS websites_storage_class, websites.admin_username AS websites_admin_username, websites.admin_password AS websites_admin_password, websites.admin_email AS websites_admin_email, websites.blog_name AS websites_blog_name, websites.status AS websites_status, websites.created_at AS websites_created_at, websites.updated_at AS websites_updated_at, websites.deployed_at AS websites_deployed_at, websites.description AS websites_description, websites.namespace AS websites_namespace, websites.ingress_url AS websites_ingress_url 
+FROM websites 
+WHERE websites.website_id = ?
+ LIMIT ? OFFSET ?
+2025-09-22 13:36:57,527 INFO sqlalchemy.engine.Engine [cached since 629.1s ago] ('pariskala', 1, 0)
+2025-09-22 13:36:57,530 INFO sqlalchemy.engine.Engine INSERT INTO websites (website_id, domain, website_type, cluster, resource_plan, database_type, storage_class, admin_username, admin_password, admin_email, blog_name, status, updated_at, deployed_at, description, namespace, ingress_url) VALUES (?, ?, ?, ?, ?, ?, ?, ?, ?, ?, ?, ?, ?, ?, ?, ?, ?) RETURNING id, created_at
+2025-09-22 13:36:57,531 INFO sqlalchemy.engine.Engine [cached since 629.1s ago] ('pariskala', 'pariskala.naserraoofi.com', 'WORDPRESS', 'dev', 'BASIC', 'INTERNAL', 'gp2', 'sirwan', '03ac674216f3e15c761ee1a5e255f067953623c8b388b4459e13f978d7c846f4', 'sirwan.rauofi@gmail.com', 'pariskala', 'PENDING', None, None, None, 'dev-pariskala', None)
+2025-09-22 13:36:57,533 INFO sqlalchemy.engine.Engine COMMIT
+2025-09-22 13:36:57,546 INFO sqlalchemy.engine.Engine BEGIN (implicit)
+2025-09-22 13:36:57,547 INFO sqlalchemy.engine.Engine SELECT websites.id, websites.website_id, websites.domain, websites.website_type, websites.cluster, websites.resource_plan, websites.database_type, websites.storage_class, websites.admin_username, websites.admin_password, websites.admin_email, websites.blog_name, websites.status, websites.created_at, websites.updated_at, websites.deployed_at, websites.description, websites.namespace, websites.ingress_url 
+FROM websites 
+WHERE websites.id = ?
+2025-09-22 13:36:57,547 INFO sqlalchemy.engine.Engine [cached since 629.1s ago] (4,)
+2025-09-22 13:36:57,549 INFO sqlalchemy.engine.Engine ROLLBACK
+INFO:     127.0.0.1:40280 - "POST /api/v1/websites/ HTTP/1.1" 200 OK
+2025-09-22 13:36:57,551 INFO sqlalchemy.engine.Engine BEGIN (implicit)
+2025-09-22 13:36:57,552 INFO sqlalchemy.engine.Engine SELECT websites.id AS websites_id, websites.website_id AS websites_website_id, websites.domain AS websites_domain, websites.website_type AS websites_website_type, websites.cluster AS websites_cluster, websites.resource_plan AS websites_resource_plan, websites.database_type AS websites_database_type, websites.storage_class AS websites_storage_class, websites.admin_username AS websites_admin_username, websites.admin_password AS websites_admin_password, websites.admin_email AS websites_admin_email, websites.blog_name AS websites_blog_name, websites.status AS websites_status, websites.created_at AS websites_created_at, websites.updated_at AS websites_updated_at, websites.deployed_at AS websites_deployed_at, websites.description AS websites_description, websites.namespace AS websites_namespace, websites.ingress_url AS websites_ingress_url 
+FROM websites 
+WHERE websites.id = ?
+ LIMIT ? OFFSET ?
+2025-09-22 13:36:57,552 INFO sqlalchemy.engine.Engine [cached since 629.1s ago] (4, 1, 0)
+2025-09-22 13:36:57,554 INFO sqlalchemy.engine.Engine UPDATE websites SET status=?, updated_at=CURRENT_TIMESTAMP WHERE websites.id = ?
+2025-09-22 13:36:57,554 INFO sqlalchemy.engine.Engine [cached since 629.1s ago] ('CREATING', 4)
+2025-09-22 13:36:57,556 INFO sqlalchemy.engine.Engine COMMIT
+2025-09-22 13:36:57,563 INFO sqlalchemy.engine.Engine BEGIN (implicit)
+2025-09-22 13:36:57,563 INFO sqlalchemy.engine.Engine SELECT websites.id AS websites_id, websites.website_id AS websites_website_id, websites.domain AS websites_domain, websites.website_type AS websites_website_type, websites.cluster AS websites_cluster, websites.resource_plan AS websites_resource_plan, websites.database_type AS websites_database_type, websites.storage_class AS websites_storage_class, websites.admin_username AS websites_admin_username, websites.admin_password AS websites_admin_password, websites.admin_email AS websites_admin_email, websites.blog_name AS websites_blog_name, websites.status AS websites_status, websites.created_at AS websites_created_at, websites.updated_at AS websites_updated_at, websites.deployed_at AS websites_deployed_at, websites.description AS websites_description, websites.namespace AS websites_namespace, websites.ingress_url AS websites_ingress_url 
+FROM websites 
+WHERE websites.id = ?
+2025-09-22 13:36:57,564 INFO sqlalchemy.engine.Engine [cached since 629.1s ago] (4,)
+Generated Helm values file: /home/sirwan/apps-repo/charts/website-template/values/values-pariskala.yaml
+2025-09-22 13:36:57,569 INFO sqlalchemy.engine.Engine UPDATE websites SET status=?, updated_at=CURRENT_TIMESTAMP, deployed_at=?, ingress_url=? WHERE websites.id = ?
+2025-09-22 13:36:57,569 INFO sqlalchemy.engine.Engine [cached since 629s ago] ('RUNNING', '2025-09-22 12:36:57.568897', 'https://pariskala.naserraoofi.com', 4)
+2025-09-22 13:36:57,570 INFO sqlalchemy.engine.Engine COMMIT
+WARNING:  WatchFiles detected changes in 'app/database/models.py'. Reloading...
+INFO:     Shutting down
+INFO:     Waiting for application shutdown.
+INFO:     Application shutdown complete.
+INFO:     Finished server process [127470]
+INFO:     Started server process [144873]
+INFO:     Waiting for application startup.
+2025-09-22 13:58:17,825 INFO sqlalchemy.engine.Engine BEGIN (implicit)
+2025-09-22 13:58:17,825 INFO sqlalchemy.engine.Engine PRAGMA main.table_info("websites")
+2025-09-22 13:58:17,825 INFO sqlalchemy.engine.Engine [raw sql] ()
+2025-09-22 13:58:17,826 INFO sqlalchemy.engine.Engine COMMIT
+INFO:     Application startup complete.
+WARNING:  WatchFiles detected changes in 'app/database/models.py'. Reloading...
+INFO:     Shutting down
+INFO:     Waiting for application shutdown.
+INFO:     Application shutdown complete.
+INFO:     Finished server process [144873]
+Process SpawnProcess-3:
+Traceback (most recent call last):
+  File "/usr/lib/python3.13/multiprocessing/process.py", line 313, in _bootstrap
+    self.run()
+    ~~~~~~~~^^
+  File "/usr/lib/python3.13/multiprocessing/process.py", line 108, in run
+    self._target(*self._args, **self._kwargs)
+    ~~~~~~~~~~~~^^^^^^^^^^^^^^^^^^^^^^^^^^^^^
+  File "/home/sirwan/apps-repo/.venv/lib/python3.13/site-packages/uvicorn/_subprocess.py", line 80, in subprocess_started
+    target(sockets=sockets)
+    ~~~~~~^^^^^^^^^^^^^^^^^
+  File "/home/sirwan/apps-repo/.venv/lib/python3.13/site-packages/uvicorn/server.py", line 67, in run
+    return asyncio_run(self.serve(sockets=sockets), loop_factory=self.config.get_loop_factory())
+  File "/usr/lib/python3.13/asyncio/runners.py", line 195, in run
+    return runner.run(main)
+           ~~~~~~~~~~^^^^^^
+  File "/usr/lib/python3.13/asyncio/runners.py", line 118, in run
+    return self._loop.run_until_complete(task)
+           ~~~~~~~~~~~~~~~~~~~~~~~~~~~~~^^^^^^
+  File "uvloop/loop.pyx", line 1518, in uvloop.loop.Loop.run_until_complete
+  File "/home/sirwan/apps-repo/.venv/lib/python3.13/site-packages/uvicorn/server.py", line 71, in serve
+    await self._serve(sockets)
+  File "/home/sirwan/apps-repo/.venv/lib/python3.13/site-packages/uvicorn/server.py", line 78, in _serve
+    config.load()
+    ~~~~~~~~~~~^^
+  File "/home/sirwan/apps-repo/.venv/lib/python3.13/site-packages/uvicorn/config.py", line 436, in load
+    self.loaded_app = import_from_string(self.app)
+                      ~~~~~~~~~~~~~~~~~~^^^^^^^^^^
+  File "/home/sirwan/apps-repo/.venv/lib/python3.13/site-packages/uvicorn/importer.py", line 19, in import_from_string
+    module = importlib.import_module(module_str)
+  File "/usr/lib/python3.13/importlib/__init__.py", line 88, in import_module
+    return _bootstrap._gcd_import(name[level:], package, level)
+           ~~~~~~~~~~~~~~~~~~~~~~^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^
+  File "<frozen importlib._bootstrap>", line 1387, in _gcd_import
+  File "<frozen importlib._bootstrap>", line 1360, in _find_and_load
+  File "<frozen importlib._bootstrap>", line 1331, in _find_and_load_unlocked
+  File "<frozen importlib._bootstrap>", line 935, in _load_unlocked
+  File "<frozen importlib._bootstrap_external>", line 1026, in exec_module
+  File "<frozen importlib._bootstrap>", line 488, in _call_with_frames_removed
+  File "/home/sirwan/apps-repo/idp/backend/app/main.py", line 2, in <module>
+    from app.api.routes import health, jobs, websites
+  File "/home/sirwan/apps-repo/idp/backend/app/api/routes/websites.py", line 8, in <module>
+    from app.database.models import (
+    ...<5 lines>...
+    )
+  File "/home/sirwan/apps-repo/idp/backend/app/database/models.py", line 116
+    """Generate Bitnami WordPress compatible values.yaml from website data."""
+    ^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^
+IndentationError: expected an indented block after function definition on line 115
+WARNING:  WatchFiles detected changes in 'app/database/models.py'. Reloading...
+Process SpawnProcess-4:
+Traceback (most recent call last):
+  File "/usr/lib/python3.13/multiprocessing/process.py", line 313, in _bootstrap
+    self.run()
+    ~~~~~~~~^^
+  File "/usr/lib/python3.13/multiprocessing/process.py", line 108, in run
+    self._target(*self._args, **self._kwargs)
+    ~~~~~~~~~~~~^^^^^^^^^^^^^^^^^^^^^^^^^^^^^
+  File "/home/sirwan/apps-repo/.venv/lib/python3.13/site-packages/uvicorn/_subprocess.py", line 80, in subprocess_started
+    target(sockets=sockets)
+    ~~~~~~^^^^^^^^^^^^^^^^^
+  File "/home/sirwan/apps-repo/.venv/lib/python3.13/site-packages/uvicorn/server.py", line 67, in run
+    return asyncio_run(self.serve(sockets=sockets), loop_factory=self.config.get_loop_factory())
+  File "/usr/lib/python3.13/asyncio/runners.py", line 195, in run
+    return runner.run(main)
+           ~~~~~~~~~~^^^^^^
+  File "/usr/lib/python3.13/asyncio/runners.py", line 118, in run
+    return self._loop.run_until_complete(task)
+           ~~~~~~~~~~~~~~~~~~~~~~~~~~~~~^^^^^^
+  File "uvloop/loop.pyx", line 1518, in uvloop.loop.Loop.run_until_complete
+  File "/home/sirwan/apps-repo/.venv/lib/python3.13/site-packages/uvicorn/server.py", line 71, in serve
+    await self._serve(sockets)
+  File "/home/sirwan/apps-repo/.venv/lib/python3.13/site-packages/uvicorn/server.py", line 78, in _serve
+    config.load()
+    ~~~~~~~~~~~^^
+  File "/home/sirwan/apps-repo/.venv/lib/python3.13/site-packages/uvicorn/config.py", line 436, in load
+    self.loaded_app = import_from_string(self.app)
+                      ~~~~~~~~~~~~~~~~~~^^^^^^^^^^
+  File "/home/sirwan/apps-repo/.venv/lib/python3.13/site-packages/uvicorn/importer.py", line 19, in import_from_string
+    module = importlib.import_module(module_str)
+  File "/usr/lib/python3.13/importlib/__init__.py", line 88, in import_module
+    return _bootstrap._gcd_import(name[level:], package, level)
+           ~~~~~~~~~~~~~~~~~~~~~~^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^
+  File "<frozen importlib._bootstrap>", line 1387, in _gcd_import
+  File "<frozen importlib._bootstrap>", line 1360, in _find_and_load
+  File "<frozen importlib._bootstrap>", line 1331, in _find_and_load_unlocked
+  File "<frozen importlib._bootstrap>", line 935, in _load_unlocked
+  File "<frozen importlib._bootstrap_external>", line 1026, in exec_module
+  File "<frozen importlib._bootstrap>", line 488, in _call_with_frames_removed
+  File "/home/sirwan/apps-repo/idp/backend/app/main.py", line 2, in <module>
+    from app.api.routes import health, jobs, websites
+  File "/home/sirwan/apps-repo/idp/backend/app/api/routes/websites.py", line 8, in <module>
+    from app.database.models import (
+    ...<5 lines>...
+    )
+  File "/home/sirwan/apps-repo/idp/backend/app/database/models.py", line 212
+    return values
+IndentationError: unexpected indent
+WARNING:  WatchFiles detected changes in 'app/database/models.py'. Reloading...
+INFO:     Started server process [145580]
+INFO:     Waiting for application startup.
+2025-09-22 13:59:28,672 INFO sqlalchemy.engine.Engine BEGIN (implicit)
+2025-09-22 13:59:28,673 INFO sqlalchemy.engine.Engine PRAGMA main.table_info("websites")
+2025-09-22 13:59:28,673 INFO sqlalchemy.engine.Engine [raw sql] ()
+2025-09-22 13:59:28,674 INFO sqlalchemy.engine.Engine COMMIT
+INFO:     Application startup complete.
+WARNING:  WatchFiles detected changes in 'app/database/models.py'. Reloading...
+INFO:     Shutting down
+INFO:     Waiting for application shutdown.
+INFO:     Application shutdown complete.
+INFO:     Finished server process [145580]
+Process SpawnProcess-6:
+Traceback (most recent call last):
+  File "/usr/lib/python3.13/multiprocessing/process.py", line 313, in _bootstrap
+    self.run()
+    ~~~~~~~~^^
+  File "/usr/lib/python3.13/multiprocessing/process.py", line 108, in run
+    self._target(*self._args, **self._kwargs)
+    ~~~~~~~~~~~~^^^^^^^^^^^^^^^^^^^^^^^^^^^^^
+  File "/home/sirwan/apps-repo/.venv/lib/python3.13/site-packages/uvicorn/_subprocess.py", line 80, in subprocess_started
+    target(sockets=sockets)
+    ~~~~~~^^^^^^^^^^^^^^^^^
+  File "/home/sirwan/apps-repo/.venv/lib/python3.13/site-packages/uvicorn/server.py", line 67, in run
+    return asyncio_run(self.serve(sockets=sockets), loop_factory=self.config.get_loop_factory())
+  File "/usr/lib/python3.13/asyncio/runners.py", line 195, in run
+    return runner.run(main)
+           ~~~~~~~~~~^^^^^^
+  File "/usr/lib/python3.13/asyncio/runners.py", line 118, in run
+    return self._loop.run_until_complete(task)
+           ~~~~~~~~~~~~~~~~~~~~~~~~~~~~~^^^^^^
+  File "uvloop/loop.pyx", line 1518, in uvloop.loop.Loop.run_until_complete
+  File "/home/sirwan/apps-repo/.venv/lib/python3.13/site-packages/uvicorn/server.py", line 71, in serve
+    await self._serve(sockets)
+  File "/home/sirwan/apps-repo/.venv/lib/python3.13/site-packages/uvicorn/server.py", line 78, in _serve
+    config.load()
+    ~~~~~~~~~~~^^
+  File "/home/sirwan/apps-repo/.venv/lib/python3.13/site-packages/uvicorn/config.py", line 436, in load
+    self.loaded_app = import_from_string(self.app)
+                      ~~~~~~~~~~~~~~~~~~^^^^^^^^^^
+  File "/home/sirwan/apps-repo/.venv/lib/python3.13/site-packages/uvicorn/importer.py", line 19, in import_from_string
+    module = importlib.import_module(module_str)
+  File "/usr/lib/python3.13/importlib/__init__.py", line 88, in import_module
+    return _bootstrap._gcd_import(name[level:], package, level)
+           ~~~~~~~~~~~~~~~~~~~~~~^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^
+  File "<frozen importlib._bootstrap>", line 1387, in _gcd_import
+  File "<frozen importlib._bootstrap>", line 1360, in _find_and_load
+  File "<frozen importlib._bootstrap>", line 1331, in _find_and_load_unlocked
+  File "<frozen importlib._bootstrap>", line 935, in _load_unlocked
+  File "<frozen importlib._bootstrap_external>", line 1026, in exec_module
+  File "<frozen importlib._bootstrap>", line 488, in _call_with_frames_removed
+  File "/home/sirwan/apps-repo/idp/backend/app/main.py", line 2, in <module>
+    from app.api.routes import health, jobs, websites
+  File "/home/sirwan/apps-repo/idp/backend/app/api/routes/websites.py", line 8, in <module>
+    from app.database.models import (
+    ...<5 lines>...
+    )
+  File "/home/sirwan/apps-repo/idp/backend/app/database/models.py", line 133
+    """Generate Bitnami WordPress compatible values.yaml from website data."""
+    ^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^
+IndentationError: expected an indented block after function definition on line 132
+WARNING:  WatchFiles detected changes in 'app/database/models.py'. Reloading...
+INFO:     Started server process [146195]
+INFO:     Waiting for application startup.
+2025-09-22 14:00:27,692 INFO sqlalchemy.engine.Engine BEGIN (implicit)
+2025-09-22 14:00:27,693 INFO sqlalchemy.engine.Engine PRAGMA main.table_info("websites")
+2025-09-22 14:00:27,693 INFO sqlalchemy.engine.Engine [raw sql] ()
+2025-09-22 14:00:27,694 INFO sqlalchemy.engine.Engine COMMIT
+INFO:     Application startup complete.
+WARNING:  WatchFiles detected changes in 'app/database/models.py'. Reloading...
+INFO:     Shutting down
+INFO:     Waiting for application shutdown.
+INFO:     Application shutdown complete.
+INFO:     Finished server process [146195]
+Process SpawnProcess-8:
+Traceback (most recent call last):
+  File "/usr/lib/python3.13/multiprocessing/process.py", line 313, in _bootstrap
+    self.run()
+    ~~~~~~~~^^
+  File "/usr/lib/python3.13/multiprocessing/process.py", line 108, in run
+    self._target(*self._args, **self._kwargs)
+    ~~~~~~~~~~~~^^^^^^^^^^^^^^^^^^^^^^^^^^^^^
+  File "/home/sirwan/apps-repo/.venv/lib/python3.13/site-packages/uvicorn/_subprocess.py", line 80, in subprocess_started
+    target(sockets=sockets)
+    ~~~~~~^^^^^^^^^^^^^^^^^
+  File "/home/sirwan/apps-repo/.venv/lib/python3.13/site-packages/uvicorn/server.py", line 67, in run
+    return asyncio_run(self.serve(sockets=sockets), loop_factory=self.config.get_loop_factory())
+  File "/usr/lib/python3.13/asyncio/runners.py", line 195, in run
+    return runner.run(main)
+           ~~~~~~~~~~^^^^^^
+  File "/usr/lib/python3.13/asyncio/runners.py", line 118, in run
+    return self._loop.run_until_complete(task)
+           ~~~~~~~~~~~~~~~~~~~~~~~~~~~~~^^^^^^
+  File "uvloop/loop.pyx", line 1518, in uvloop.loop.Loop.run_until_complete
+  File "/home/sirwan/apps-repo/.venv/lib/python3.13/site-packages/uvicorn/server.py", line 71, in serve
+    await self._serve(sockets)
+  File "/home/sirwan/apps-repo/.venv/lib/python3.13/site-packages/uvicorn/server.py", line 78, in _serve
+    config.load()
+    ~~~~~~~~~~~^^
+  File "/home/sirwan/apps-repo/.venv/lib/python3.13/site-packages/uvicorn/config.py", line 436, in load
+    self.loaded_app = import_from_string(self.app)
+                      ~~~~~~~~~~~~~~~~~~^^^^^^^^^^
+  File "/home/sirwan/apps-repo/.venv/lib/python3.13/site-packages/uvicorn/importer.py", line 19, in import_from_string
+    module = importlib.import_module(module_str)
+  File "/usr/lib/python3.13/importlib/__init__.py", line 88, in import_module
+    return _bootstrap._gcd_import(name[level:], package, level)
+           ~~~~~~~~~~~~~~~~~~~~~~^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^
+  File "<frozen importlib._bootstrap>", line 1387, in _gcd_import
+  File "<frozen importlib._bootstrap>", line 1360, in _find_and_load
+  File "<frozen importlib._bootstrap>", line 1331, in _find_and_load_unlocked
+  File "<frozen importlib._bootstrap>", line 935, in _load_unlocked
+  File "<frozen importlib._bootstrap_external>", line 1026, in exec_module
+  File "<frozen importlib._bootstrap>", line 488, in _call_with_frames_removed
+  File "/home/sirwan/apps-repo/idp/backend/app/main.py", line 2, in <module>
+    from app.api.routes import health, jobs, websites
+  File "/home/sirwan/apps-repo/idp/backend/app/api/routes/websites.py", line 8, in <module>
+    from app.database.models import (
+    ...<5 lines>...
+    )
+  File "/home/sirwan/apps-repo/idp/backend/app/database/models.py", line 133
+    """Generate Bitnami WordPress values for bitnami/wordpress chart."""
+    ^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^
+IndentationError: expected an indented block after function definition on line 132
+WARNING:  WatchFiles detected changes in 'app/database/models.py'. Reloading...
+INFO:     Started server process [146392]
+INFO:     Waiting for application startup.
+2025-09-22 14:00:52,057 INFO sqlalchemy.engine.Engine BEGIN (implicit)
+2025-09-22 14:00:52,057 INFO sqlalchemy.engine.Engine PRAGMA main.table_info("websites")
+2025-09-22 14:00:52,058 INFO sqlalchemy.engine.Engine [raw sql] ()
+2025-09-22 14:00:52,058 INFO sqlalchemy.engine.Engine COMMIT
+INFO:     Application startup complete.
+WARNING:  WatchFiles detected changes in 'app/database/models.py'. Reloading...
+INFO:     Shutting down
+INFO:     Waiting for application shutdown.
+INFO:     Application shutdown complete.
+INFO:     Finished server process [146392]
+INFO:     Started server process [146444]
+INFO:     Waiting for application startup.
+2025-09-22 14:00:57,329 INFO sqlalchemy.engine.Engine BEGIN (implicit)
+2025-09-22 14:00:57,330 INFO sqlalchemy.engine.Engine PRAGMA main.table_info("websites")
+2025-09-22 14:00:57,330 INFO sqlalchemy.engine.Engine [raw sql] ()
+2025-09-22 14:00:57,331 INFO sqlalchemy.engine.Engine COMMIT
+INFO:     Application startup complete.
+WARNING:  WatchFiles detected changes in 'app/database/models.py'. Reloading...
+INFO:     Shutting down
+INFO:     Waiting for application shutdown.
+INFO:     Application shutdown complete.
+INFO:     Finished server process [146444]
+INFO:     Started server process [146830]
+INFO:     Waiting for application startup.
+2025-09-22 14:01:24,455 INFO sqlalchemy.engine.Engine BEGIN (implicit)
+2025-09-22 14:01:24,456 INFO sqlalchemy.engine.Engine PRAGMA main.table_info("websites")
+2025-09-22 14:01:24,456 INFO sqlalchemy.engine.Engine [raw sql] ()
+2025-09-22 14:01:24,457 INFO sqlalchemy.engine.Engine COMMIT
+INFO:     Application startup complete.
+INFO:     127.0.0.1:42540 - "OPTIONS /api/v1/websites/ HTTP/1.1" 200 OK
+2025-09-22 14:01:57,872 INFO sqlalchemy.engine.Engine BEGIN (implicit)
+2025-09-22 14:01:57,886 INFO sqlalchemy.engine.Engine SELECT websites.id AS websites_id, websites.website_id AS websites_website_id, websites.domain AS websites_domain, websites.website_type AS websites_website_type, websites.cluster AS websites_cluster, websites.resource_plan AS websites_resource_plan, websites.database_type AS websites_database_type, websites.storage_class AS websites_storage_class, websites.admin_username AS websites_admin_username, websites.admin_password AS websites_admin_password, websites.admin_email AS websites_admin_email, websites.blog_name AS websites_blog_name, websites.status AS websites_status, websites.created_at AS websites_created_at, websites.updated_at AS websites_updated_at, websites.deployed_at AS websites_deployed_at, websites.description AS websites_description, websites.namespace AS websites_namespace, websites.ingress_url AS websites_ingress_url 
+FROM websites 
+WHERE websites.website_id = ?
+ LIMIT ? OFFSET ?
+2025-09-22 14:01:57,887 INFO sqlalchemy.engine.Engine [generated in 0.00091s] ('wedf', 1, 0)
+2025-09-22 14:01:57,895 INFO sqlalchemy.engine.Engine INSERT INTO websites (website_id, domain, website_type, cluster, resource_plan, database_type, storage_class, admin_username, admin_password, admin_email, blog_name, status, updated_at, deployed_at, description, namespace, ingress_url) VALUES (?, ?, ?, ?, ?, ?, ?, ?, ?, ?, ?, ?, ?, ?, ?, ?, ?) RETURNING id, created_at
+2025-09-22 14:01:57,896 INFO sqlalchemy.engine.Engine [generated in 0.00087s] ('wedf', 'wedf.naserraoofi.com', 'WORDPRESS', 'dev', 'BASIC', 'INTERNAL', 'gp2', 'qwe', '8f41be9b50f5e3405fda18362b27df515e32cf56248bb85fd4bd7a89dabd2210', 'sirwan@gmail.com', 'sad', 'PENDING', None, None, None, 'dev-wedf', None)
+2025-09-22 14:01:57,898 INFO sqlalchemy.engine.Engine COMMIT
+2025-09-22 14:01:57,915 INFO sqlalchemy.engine.Engine BEGIN (implicit)
+2025-09-22 14:01:57,916 INFO sqlalchemy.engine.Engine SELECT websites.id, websites.website_id, websites.domain, websites.website_type, websites.cluster, websites.resource_plan, websites.database_type, websites.storage_class, websites.admin_username, websites.admin_password, websites.admin_email, websites.blog_name, websites.status, websites.created_at, websites.updated_at, websites.deployed_at, websites.description, websites.namespace, websites.ingress_url 
+FROM websites 
+WHERE websites.id = ?
+2025-09-22 14:01:57,917 INFO sqlalchemy.engine.Engine [generated in 0.00020s] (5,)
+2025-09-22 14:01:57,918 INFO sqlalchemy.engine.Engine ROLLBACK
+INFO:     127.0.0.1:42540 - "POST /api/v1/websites/ HTTP/1.1" 200 OK
+2025-09-22 14:01:57,919 INFO sqlalchemy.engine.Engine BEGIN (implicit)
+2025-09-22 14:01:57,920 INFO sqlalchemy.engine.Engine SELECT websites.id AS websites_id, websites.website_id AS websites_website_id, websites.domain AS websites_domain, websites.website_type AS websites_website_type, websites.cluster AS websites_cluster, websites.resource_plan AS websites_resource_plan, websites.database_type AS websites_database_type, websites.storage_class AS websites_storage_class, websites.admin_username AS websites_admin_username, websites.admin_password AS websites_admin_password, websites.admin_email AS websites_admin_email, websites.blog_name AS websites_blog_name, websites.status AS websites_status, websites.created_at AS websites_created_at, websites.updated_at AS websites_updated_at, websites.deployed_at AS websites_deployed_at, websites.description AS websites_description, websites.namespace AS websites_namespace, websites.ingress_url AS websites_ingress_url 
+FROM websites 
+WHERE websites.id = ?
+ LIMIT ? OFFSET ?
+2025-09-22 14:01:57,920 INFO sqlalchemy.engine.Engine [generated in 0.00018s] (5, 1, 0)
+2025-09-22 14:01:57,922 INFO sqlalchemy.engine.Engine UPDATE websites SET status=?, updated_at=CURRENT_TIMESTAMP WHERE websites.id = ?
+2025-09-22 14:01:57,922 INFO sqlalchemy.engine.Engine [generated in 0.00018s] ('CREATING', 5)
+2025-09-22 14:01:57,923 INFO sqlalchemy.engine.Engine COMMIT
+2025-09-22 14:01:57,929 INFO sqlalchemy.engine.Engine BEGIN (implicit)
+2025-09-22 14:01:57,930 INFO sqlalchemy.engine.Engine SELECT websites.id AS websites_id, websites.website_id AS websites_website_id, websites.domain AS websites_domain, websites.website_type AS websites_website_type, websites.cluster AS websites_cluster, websites.resource_plan AS websites_resource_plan, websites.database_type AS websites_database_type, websites.storage_class AS websites_storage_class, websites.admin_username AS websites_admin_username, websites.admin_password AS websites_admin_password, websites.admin_email AS websites_admin_email, websites.blog_name AS websites_blog_name, websites.status AS websites_status, websites.created_at AS websites_created_at, websites.updated_at AS websites_updated_at, websites.deployed_at AS websites_deployed_at, websites.description AS websites_description, websites.namespace AS websites_namespace, websites.ingress_url AS websites_ingress_url 
+FROM websites 
+WHERE websites.id = ?
+2025-09-22 14:01:57,930 INFO sqlalchemy.engine.Engine [generated in 0.00018s] (5,)
+Generated Helm values file: /home/sirwan/apps-repo/charts/website-template/values/values-wedf.yaml
+2025-09-22 14:01:57,934 INFO sqlalchemy.engine.Engine UPDATE websites SET status=?, updated_at=CURRENT_TIMESTAMP, deployed_at=?, ingress_url=? WHERE websites.id = ?
+2025-09-22 14:01:57,935 INFO sqlalchemy.engine.Engine [generated in 0.00028s] ('RUNNING', '2025-09-22 13:01:57.934191', 'https://wedf.naserraoofi.com', 5)
+2025-09-22 14:01:57,935 INFO sqlalchemy.engine.Engine COMMIT
+WARNING:  WatchFiles detected changes in 'app/database/models.py'. Reloading...
+INFO:     Shutting down
+INFO:     Waiting for application shutdown.
+INFO:     Application shutdown complete.
+INFO:     Finished server process [146830]
+INFO:     Started server process [151867]
+INFO:     Waiting for application startup.
+2025-09-22 14:11:46,951 INFO sqlalchemy.engine.Engine BEGIN (implicit)
+2025-09-22 14:11:46,951 INFO sqlalchemy.engine.Engine PRAGMA main.table_info("websites")
+2025-09-22 14:11:46,951 INFO sqlalchemy.engine.Engine [raw sql] ()
+2025-09-22 14:11:46,952 INFO sqlalchemy.engine.Engine COMMIT
+INFO:     Application startup complete.
+WARNING:  WatchFiles detected changes in 'app/database/models.py'. Reloading...
+INFO:     Shutting down
+INFO:     Waiting for application shutdown.
+INFO:     Application shutdown complete.
+INFO:     Finished server process [151867]
+INFO:     Started server process [151952]
+INFO:     Waiting for application startup.
+2025-09-22 14:11:56,388 INFO sqlalchemy.engine.Engine BEGIN (implicit)
+2025-09-22 14:11:56,388 INFO sqlalchemy.engine.Engine PRAGMA main.table_info("websites")
+2025-09-22 14:11:56,389 INFO sqlalchemy.engine.Engine [raw sql] ()
+2025-09-22 14:11:56,389 INFO sqlalchemy.engine.Engine COMMIT
+INFO:     Application startup complete.
+WARNING:  WatchFiles detected changes in 'app/database/models.py'. Reloading...
+INFO:     Shutting down
+INFO:     Waiting for application shutdown.
+INFO:     Application shutdown complete.
+INFO:     Finished server process [151952]
+INFO:     Started server process [158388]
+INFO:     Waiting for application startup.
+2025-09-22 14:24:21,236 INFO sqlalchemy.engine.Engine BEGIN (implicit)
+2025-09-22 14:24:21,237 INFO sqlalchemy.engine.Engine PRAGMA main.table_info("websites")
+2025-09-22 14:24:21,237 INFO sqlalchemy.engine.Engine [raw sql] ()
+2025-09-22 14:24:21,238 INFO sqlalchemy.engine.Engine COMMIT
+INFO:     Application startup complete.
+INFO:     127.0.0.1:58114 - "OPTIONS /api/v1/websites/ HTTP/1.1" 200 OK
+2025-09-22 14:25:09,554 INFO sqlalchemy.engine.Engine BEGIN (implicit)
+2025-09-22 14:25:09,566 INFO sqlalchemy.engine.Engine SELECT websites.id AS websites_id, websites.website_id AS websites_website_id, websites.domain AS websites_domain, websites.website_type AS websites_website_type, websites.cluster AS websites_cluster, websites.resource_plan AS websites_resource_plan, websites.database_type AS websites_database_type, websites.storage_class AS websites_storage_class, websites.admin_username AS websites_admin_username, websites.admin_password AS websites_admin_password, websites.admin_email AS websites_admin_email, websites.blog_name AS websites_blog_name, websites.status AS websites_status, websites.created_at AS websites_created_at, websites.updated_at AS websites_updated_at, websites.deployed_at AS websites_deployed_at, websites.description AS websites_description, websites.namespace AS websites_namespace, websites.ingress_url AS websites_ingress_url 
+FROM websites 
+WHERE websites.website_id = ?
+ LIMIT ? OFFSET ?
+2025-09-22 14:25:09,566 INFO sqlalchemy.engine.Engine [generated in 0.00070s] ('saman', 1, 0)
+2025-09-22 14:25:09,573 INFO sqlalchemy.engine.Engine INSERT INTO websites (website_id, domain, website_type, cluster, resource_plan, database_type, storage_class, admin_username, admin_password, admin_email, blog_name, status, updated_at, deployed_at, description, namespace, ingress_url) VALUES (?, ?, ?, ?, ?, ?, ?, ?, ?, ?, ?, ?, ?, ?, ?, ?, ?) RETURNING id, created_at
+2025-09-22 14:25:09,574 INFO sqlalchemy.engine.Engine [generated in 0.00054s] ('saman', 'saman.naserraoofi.com', 'WORDPRESS', 'dev', 'BASIC', 'INTERNAL', 'gp2', 'qwd', '5a4607f7c641eb1e0e450ae75a1216e0f1e20cf1d996f574a36dfde145f1b862', 'qwed', 'saman', 'PENDING', None, None, None, 'dev-saman', None)
+2025-09-22 14:25:09,576 INFO sqlalchemy.engine.Engine COMMIT
+2025-09-22 14:25:09,590 INFO sqlalchemy.engine.Engine BEGIN (implicit)
+2025-09-22 14:25:09,592 INFO sqlalchemy.engine.Engine SELECT websites.id, websites.website_id, websites.domain, websites.website_type, websites.cluster, websites.resource_plan, websites.database_type, websites.storage_class, websites.admin_username, websites.admin_password, websites.admin_email, websites.blog_name, websites.status, websites.created_at, websites.updated_at, websites.deployed_at, websites.description, websites.namespace, websites.ingress_url 
+FROM websites 
+WHERE websites.id = ?
+2025-09-22 14:25:09,592 INFO sqlalchemy.engine.Engine [generated in 0.00026s] (6,)
+2025-09-22 14:25:09,594 INFO sqlalchemy.engine.Engine ROLLBACK
+INFO:     127.0.0.1:58114 - "POST /api/v1/websites/ HTTP/1.1" 200 OK
+2025-09-22 14:25:09,595 INFO sqlalchemy.engine.Engine BEGIN (implicit)
+2025-09-22 14:25:09,597 INFO sqlalchemy.engine.Engine SELECT websites.id AS websites_id, websites.website_id AS websites_website_id, websites.domain AS websites_domain, websites.website_type AS websites_website_type, websites.cluster AS websites_cluster, websites.resource_plan AS websites_resource_plan, websites.database_type AS websites_database_type, websites.storage_class AS websites_storage_class, websites.admin_username AS websites_admin_username, websites.admin_password AS websites_admin_password, websites.admin_email AS websites_admin_email, websites.blog_name AS websites_blog_name, websites.status AS websites_status, websites.created_at AS websites_created_at, websites.updated_at AS websites_updated_at, websites.deployed_at AS websites_deployed_at, websites.description AS websites_description, websites.namespace AS websites_namespace, websites.ingress_url AS websites_ingress_url 
+FROM websites 
+WHERE websites.id = ?
+ LIMIT ? OFFSET ?
+2025-09-22 14:25:09,597 INFO sqlalchemy.engine.Engine [generated in 0.00026s] (6, 1, 0)
+2025-09-22 14:25:09,600 INFO sqlalchemy.engine.Engine UPDATE websites SET status=?, updated_at=CURRENT_TIMESTAMP WHERE websites.id = ?
+2025-09-22 14:25:09,600 INFO sqlalchemy.engine.Engine [generated in 0.00025s] ('CREATING', 6)
+2025-09-22 14:25:09,601 INFO sqlalchemy.engine.Engine COMMIT
+2025-09-22 14:25:09,608 INFO sqlalchemy.engine.Engine BEGIN (implicit)
+2025-09-22 14:25:09,609 INFO sqlalchemy.engine.Engine SELECT websites.id AS websites_id, websites.website_id AS websites_website_id, websites.domain AS websites_domain, websites.website_type AS websites_website_type, websites.cluster AS websites_cluster, websites.resource_plan AS websites_resource_plan, websites.database_type AS websites_database_type, websites.storage_class AS websites_storage_class, websites.admin_username AS websites_admin_username, websites.admin_password AS websites_admin_password, websites.admin_email AS websites_admin_email, websites.blog_name AS websites_blog_name, websites.status AS websites_status, websites.created_at AS websites_created_at, websites.updated_at AS websites_updated_at, websites.deployed_at AS websites_deployed_at, websites.description AS websites_description, websites.namespace AS websites_namespace, websites.ingress_url AS websites_ingress_url 
+FROM websites 
+WHERE websites.id = ?
+2025-09-22 14:25:09,609 INFO sqlalchemy.engine.Engine [generated in 0.00024s] (6,)
+Generated Helm values file: /home/sirwan/apps-repo/charts/website-template/values/values-saman.yaml
+2025-09-22 14:25:09,616 INFO sqlalchemy.engine.Engine UPDATE websites SET status=?, updated_at=CURRENT_TIMESTAMP, deployed_at=?, ingress_url=? WHERE websites.id = ?
+2025-09-22 14:25:09,616 INFO sqlalchemy.engine.Engine [generated in 0.00028s] ('RUNNING', '2025-09-22 13:25:09.615658', 'https://saman.naserraoofi.com', 6)
+2025-09-22 14:25:09,617 INFO sqlalchemy.engine.Engine COMMIT
+WARNING:  WatchFiles detected changes in 'app/database/models.py'. Reloading...
+INFO:     Shutting down
+INFO:     Waiting for application shutdown.
+INFO:     Application shutdown complete.
+INFO:     Finished server process [158388]
+INFO:     Started server process [165563]
+INFO:     Waiting for application startup.
+2025-09-22 14:38:41,762 INFO sqlalchemy.engine.Engine BEGIN (implicit)
+2025-09-22 14:38:41,762 INFO sqlalchemy.engine.Engine PRAGMA main.table_info("websites")
+2025-09-22 14:38:41,762 INFO sqlalchemy.engine.Engine [raw sql] ()
+2025-09-22 14:38:41,764 INFO sqlalchemy.engine.Engine COMMIT
+INFO:     Application startup complete.
+WARNING:  WatchFiles detected changes in 'app/database/models.py'. Reloading...
+INFO:     Shutting down
+INFO:     Waiting for application shutdown.
+INFO:     Application shutdown complete.
+INFO:     Finished server process [165563]
+INFO:     Started server process [166068]
+INFO:     Waiting for application startup.
+2025-09-22 14:39:34,017 INFO sqlalchemy.engine.Engine BEGIN (implicit)
+2025-09-22 14:39:34,017 INFO sqlalchemy.engine.Engine PRAGMA main.table_info("websites")
+2025-09-22 14:39:34,017 INFO sqlalchemy.engine.Engine [raw sql] ()
+2025-09-22 14:39:34,018 INFO sqlalchemy.engine.Engine COMMIT
+INFO:     Application startup complete.
+WARNING:  WatchFiles detected changes in 'app/database/models.py'. Reloading...
+INFO:     Shutting down
+INFO:     Waiting for application shutdown.
+INFO:     Application shutdown complete.
+INFO:     Finished server process [166068]
+INFO:     Started server process [166836]
+INFO:     Waiting for application startup.
+2025-09-22 14:41:21,919 INFO sqlalchemy.engine.Engine BEGIN (implicit)
+2025-09-22 14:41:21,920 INFO sqlalchemy.engine.Engine PRAGMA main.table_info("websites")
+2025-09-22 14:41:21,922 INFO sqlalchemy.engine.Engine [raw sql] ()
+2025-09-22 14:41:21,923 INFO sqlalchemy.engine.Engine COMMIT
+INFO:     Application startup complete.
+INFO:     127.0.0.1:49786 - "OPTIONS /api/v1/websites/ HTTP/1.1" 200 OK
+2025-09-22 20:35:49,199 INFO sqlalchemy.engine.Engine BEGIN (implicit)
+2025-09-22 20:35:49,215 INFO sqlalchemy.engine.Engine SELECT websites.id AS websites_id, websites.website_id AS websites_website_id, websites.domain AS websites_domain, websites.website_type AS websites_website_type, websites.cluster AS websites_cluster, websites.resource_plan AS websites_resource_plan, websites.database_type AS websites_database_type, websites.storage_class AS websites_storage_class, websites.admin_username AS websites_admin_username, websites.admin_password AS websites_admin_password, websites.admin_email AS websites_admin_email, websites.blog_name AS websites_blog_name, websites.status AS websites_status, websites.created_at AS websites_created_at, websites.updated_at AS websites_updated_at, websites.deployed_at AS websites_deployed_at, websites.description AS websites_description, websites.namespace AS websites_namespace, websites.ingress_url AS websites_ingress_url 
+FROM websites 
+WHERE websites.website_id = ?
+ LIMIT ? OFFSET ?
+2025-09-22 20:35:49,215 INFO sqlalchemy.engine.Engine [generated in 0.00084s] ('qwe', 1, 0)
+2025-09-22 20:35:49,227 INFO sqlalchemy.engine.Engine INSERT INTO websites (website_id, domain, website_type, cluster, resource_plan, database_type, storage_class, admin_username, admin_password, admin_email, blog_name, status, updated_at, deployed_at, description, namespace, ingress_url) VALUES (?, ?, ?, ?, ?, ?, ?, ?, ?, ?, ?, ?, ?, ?, ?, ?, ?) RETURNING id, created_at
+2025-09-22 20:35:49,228 INFO sqlalchemy.engine.Engine [generated in 0.00097s] ('qwe', 'qwe.naserraoofi.com', 'WORDPRESS', 'dev', 'BASIC', 'INTERNAL', 'gp2', '', 'e3b0c44298fc1c149afbf4c8996fb92427ae41e4649b934ca495991b7852b855', 'we@gmail.com', 'rozhin', 'PENDING', None, None, None, 'dev-qwe', None)
+2025-09-22 20:35:49,230 INFO sqlalchemy.engine.Engine COMMIT
+2025-09-22 20:35:49,245 INFO sqlalchemy.engine.Engine BEGIN (implicit)
+2025-09-22 20:35:49,247 INFO sqlalchemy.engine.Engine SELECT websites.id, websites.website_id, websites.domain, websites.website_type, websites.cluster, websites.resource_plan, websites.database_type, websites.storage_class, websites.admin_username, websites.admin_password, websites.admin_email, websites.blog_name, websites.status, websites.created_at, websites.updated_at, websites.deployed_at, websites.description, websites.namespace, websites.ingress_url 
+FROM websites 
+WHERE websites.id = ?
+2025-09-22 20:35:49,247 INFO sqlalchemy.engine.Engine [generated in 0.00032s] (7,)
+2025-09-22 20:35:49,249 INFO sqlalchemy.engine.Engine ROLLBACK
+INFO:     127.0.0.1:49786 - "POST /api/v1/websites/ HTTP/1.1" 200 OK
+2025-09-22 20:35:49,250 INFO sqlalchemy.engine.Engine BEGIN (implicit)
+2025-09-22 20:35:49,252 INFO sqlalchemy.engine.Engine SELECT websites.id AS websites_id, websites.website_id AS websites_website_id, websites.domain AS websites_domain, websites.website_type AS websites_website_type, websites.cluster AS websites_cluster, websites.resource_plan AS websites_resource_plan, websites.database_type AS websites_database_type, websites.storage_class AS websites_storage_class, websites.admin_username AS websites_admin_username, websites.admin_password AS websites_admin_password, websites.admin_email AS websites_admin_email, websites.blog_name AS websites_blog_name, websites.status AS websites_status, websites.created_at AS websites_created_at, websites.updated_at AS websites_updated_at, websites.deployed_at AS websites_deployed_at, websites.description AS websites_description, websites.namespace AS websites_namespace, websites.ingress_url AS websites_ingress_url 
+FROM websites 
+WHERE websites.id = ?
+ LIMIT ? OFFSET ?
+2025-09-22 20:35:49,252 INFO sqlalchemy.engine.Engine [generated in 0.00028s] (7, 1, 0)
+2025-09-22 20:35:49,255 INFO sqlalchemy.engine.Engine UPDATE websites SET status=?, updated_at=CURRENT_TIMESTAMP WHERE websites.id = ?
+2025-09-22 20:35:49,255 INFO sqlalchemy.engine.Engine [generated in 0.00029s] ('CREATING', 7)
+2025-09-22 20:35:49,256 INFO sqlalchemy.engine.Engine COMMIT
+2025-09-22 20:35:49,262 INFO sqlalchemy.engine.Engine BEGIN (implicit)
+2025-09-22 20:35:49,264 INFO sqlalchemy.engine.Engine SELECT websites.id AS websites_id, websites.website_id AS websites_website_id, websites.domain AS websites_domain, websites.website_type AS websites_website_type, websites.cluster AS websites_cluster, websites.resource_plan AS websites_resource_plan, websites.database_type AS websites_database_type, websites.storage_class AS websites_storage_class, websites.admin_username AS websites_admin_username, websites.admin_password AS websites_admin_password, websites.admin_email AS websites_admin_email, websites.blog_name AS websites_blog_name, websites.status AS websites_status, websites.created_at AS websites_created_at, websites.updated_at AS websites_updated_at, websites.deployed_at AS websites_deployed_at, websites.description AS websites_description, websites.namespace AS websites_namespace, websites.ingress_url AS websites_ingress_url 
+FROM websites 
+WHERE websites.id = ?
+2025-09-22 20:35:49,264 INFO sqlalchemy.engine.Engine [generated in 0.00030s] (7,)
+Generated Helm values file: /home/sirwan/apps-repo/charts/website-template/values/values-qwe.yaml
+2025-09-22 20:35:49,271 INFO sqlalchemy.engine.Engine UPDATE websites SET status=?, updated_at=CURRENT_TIMESTAMP, deployed_at=?, ingress_url=? WHERE websites.id = ?
+2025-09-22 20:35:49,271 INFO sqlalchemy.engine.Engine [generated in 0.00030s] ('RUNNING', '2025-09-22 19:35:49.270266', 'https://qwe.naserraoofi.com', 7)
+2025-09-22 20:35:49,272 INFO sqlalchemy.engine.Engine COMMIT
+2025-09-22 20:37:23,952 INFO sqlalchemy.engine.Engine BEGIN (implicit)
+2025-09-22 20:37:23,954 INFO sqlalchemy.engine.Engine SELECT websites.id AS websites_id, websites.website_id AS websites_website_id, websites.domain AS websites_domain, websites.website_type AS websites_website_type, websites.cluster AS websites_cluster, websites.resource_plan AS websites_resource_plan, websites.database_type AS websites_database_type, websites.storage_class AS websites_storage_class, websites.admin_username AS websites_admin_username, websites.admin_password AS websites_admin_password, websites.admin_email AS websites_admin_email, websites.blog_name AS websites_blog_name, websites.status AS websites_status, websites.created_at AS websites_created_at, websites.updated_at AS websites_updated_at, websites.deployed_at AS websites_deployed_at, websites.description AS websites_description, websites.namespace AS websites_namespace, websites.ingress_url AS websites_ingress_url 
+FROM websites 
+WHERE websites.website_id = ?
+ LIMIT ? OFFSET ?
+2025-09-22 20:37:23,954 INFO sqlalchemy.engine.Engine [cached since 94.74s ago] ('sirwan', 1, 0)
+2025-09-22 20:37:23,956 INFO sqlalchemy.engine.Engine INSERT INTO websites (website_id, domain, website_type, cluster, resource_plan, database_type, storage_class, admin_username, admin_password, admin_email, blog_name, status, updated_at, deployed_at, description, namespace, ingress_url) VALUES (?, ?, ?, ?, ?, ?, ?, ?, ?, ?, ?, ?, ?, ?, ?, ?, ?) RETURNING id, created_at
+2025-09-22 20:37:23,957 INFO sqlalchemy.engine.Engine [cached since 94.73s ago] ('sirwan', 'sirwan.naserraoofi.com', 'WORDPRESS', 'dev', 'BASIC', 'INTERNAL', 'gp2', 'admin', 'a665a45920422f9d417e4867efdc4fb8a04a1f3fff1fa07e998e86f7f7a27ae3', 'admin@gmail.com', 'sirwan', 'PENDING', None, None, None, 'dev-sirwan', None)
+2025-09-22 20:37:23,961 INFO sqlalchemy.engine.Engine COMMIT
+2025-09-22 20:37:23,974 INFO sqlalchemy.engine.Engine BEGIN (implicit)
+2025-09-22 20:37:23,974 INFO sqlalchemy.engine.Engine SELECT websites.id, websites.website_id, websites.domain, websites.website_type, websites.cluster, websites.resource_plan, websites.database_type, websites.storage_class, websites.admin_username, websites.admin_password, websites.admin_email, websites.blog_name, websites.status, websites.created_at, websites.updated_at, websites.deployed_at, websites.description, websites.namespace, websites.ingress_url 
+FROM websites 
+WHERE websites.id = ?
+2025-09-22 20:37:23,974 INFO sqlalchemy.engine.Engine [cached since 94.73s ago] (8,)
+2025-09-22 20:37:23,975 INFO sqlalchemy.engine.Engine ROLLBACK
+INFO:     127.0.0.1:56308 - "POST /api/v1/websites/ HTTP/1.1" 200 OK
+2025-09-22 20:37:23,977 INFO sqlalchemy.engine.Engine BEGIN (implicit)
+2025-09-22 20:37:23,978 INFO sqlalchemy.engine.Engine SELECT websites.id AS websites_id, websites.website_id AS websites_website_id, websites.domain AS websites_domain, websites.website_type AS websites_website_type, websites.cluster AS websites_cluster, websites.resource_plan AS websites_resource_plan, websites.database_type AS websites_database_type, websites.storage_class AS websites_storage_class, websites.admin_username AS websites_admin_username, websites.admin_password AS websites_admin_password, websites.admin_email AS websites_admin_email, websites.blog_name AS websites_blog_name, websites.status AS websites_status, websites.created_at AS websites_created_at, websites.updated_at AS websites_updated_at, websites.deployed_at AS websites_deployed_at, websites.description AS websites_description, websites.namespace AS websites_namespace, websites.ingress_url AS websites_ingress_url 
+FROM websites 
+WHERE websites.id = ?
+ LIMIT ? OFFSET ?
+2025-09-22 20:37:23,978 INFO sqlalchemy.engine.Engine [cached since 94.73s ago] (8, 1, 0)
+2025-09-22 20:37:23,980 INFO sqlalchemy.engine.Engine UPDATE websites SET status=?, updated_at=CURRENT_TIMESTAMP WHERE websites.id = ?
+2025-09-22 20:37:23,980 INFO sqlalchemy.engine.Engine [cached since 94.73s ago] ('CREATING', 8)
+2025-09-22 20:37:23,981 INFO sqlalchemy.engine.Engine COMMIT
+2025-09-22 20:37:23,989 INFO sqlalchemy.engine.Engine BEGIN (implicit)
+2025-09-22 20:37:23,989 INFO sqlalchemy.engine.Engine SELECT websites.id AS websites_id, websites.website_id AS websites_website_id, websites.domain AS websites_domain, websites.website_type AS websites_website_type, websites.cluster AS websites_cluster, websites.resource_plan AS websites_resource_plan, websites.database_type AS websites_database_type, websites.storage_class AS websites_storage_class, websites.admin_username AS websites_admin_username, websites.admin_password AS websites_admin_password, websites.admin_email AS websites_admin_email, websites.blog_name AS websites_blog_name, websites.status AS websites_status, websites.created_at AS websites_created_at, websites.updated_at AS websites_updated_at, websites.deployed_at AS websites_deployed_at, websites.description AS websites_description, websites.namespace AS websites_namespace, websites.ingress_url AS websites_ingress_url 
+FROM websites 
+WHERE websites.id = ?
+2025-09-22 20:37:23,989 INFO sqlalchemy.engine.Engine [cached since 94.73s ago] (8,)
+Generated Helm values file: /home/sirwan/apps-repo/charts/website-template/values/values-sirwan.yaml
+2025-09-22 20:37:23,994 INFO sqlalchemy.engine.Engine UPDATE websites SET status=?, updated_at=CURRENT_TIMESTAMP, deployed_at=?, ingress_url=? WHERE websites.id = ?
+2025-09-22 20:37:23,994 INFO sqlalchemy.engine.Engine [cached since 94.72s ago] ('RUNNING', '2025-09-22 19:37:23.993778', 'https://sirwan.naserraoofi.com', 8)
+2025-09-22 20:37:23,994 INFO sqlalchemy.engine.Engine COMMIT
+WARNING:  WatchFiles detected changes in 'app/api/routes/websites.py'. Reloading...
+INFO:     Shutting down
+INFO:     Waiting for application shutdown.
+INFO:     Application shutdown complete.
+INFO:     Finished server process [166836]
+INFO:     Started server process [367718]
+INFO:     Waiting for application startup.
+2025-09-22 21:28:58,025 INFO sqlalchemy.engine.Engine BEGIN (implicit)
+2025-09-22 21:28:58,025 INFO sqlalchemy.engine.Engine PRAGMA main.table_info("websites")
+2025-09-22 21:28:58,026 INFO sqlalchemy.engine.Engine [raw sql] ()
+2025-09-22 21:28:58,026 INFO sqlalchemy.engine.Engine COMMIT
+INFO:     Application startup complete.
+WARNING:  WatchFiles detected changes in 'app/api/routes/websites.py'. Reloading...
+INFO:     Shutting down
+INFO:     Waiting for application shutdown.
+INFO:     Application shutdown complete.
+INFO:     Finished server process [367718]
+INFO:     Started server process [368273]
+INFO:     Waiting for application startup.
+2025-09-22 21:29:51,779 INFO sqlalchemy.engine.Engine BEGIN (implicit)
+2025-09-22 21:29:51,779 INFO sqlalchemy.engine.Engine PRAGMA main.table_info("websites")
+2025-09-22 21:29:51,780 INFO sqlalchemy.engine.Engine [raw sql] ()
+2025-09-22 21:29:51,780 INFO sqlalchemy.engine.Engine COMMIT
+INFO:     Application startup complete.
+WARNING:  WatchFiles detected changes in 'app/services/github_service.py'. Reloading...
+INFO:     Shutting down
+INFO:     Waiting for application shutdown.
+INFO:     Application shutdown complete.
+INFO:     Finished server process [368273]
+WARNING:  WatchFiles detected changes in 'app/services/github_service.py'. Reloading...
+INFO:     Started server process [369709]
+INFO:     Waiting for application startup.
+2025-09-22 21:32:19,272 INFO sqlalchemy.engine.Engine BEGIN (implicit)
+2025-09-22 21:32:19,272 INFO sqlalchemy.engine.Engine PRAGMA main.table_info("websites")
+2025-09-22 21:32:19,273 INFO sqlalchemy.engine.Engine [raw sql] ()
+2025-09-22 21:32:19,274 INFO sqlalchemy.engine.Engine COMMIT
+INFO:     Application startup complete.
+INFO:     Started server process [369741]
+INFO:     Waiting for application startup.
+2025-09-22 21:32:20,934 INFO sqlalchemy.engine.Engine BEGIN (implicit)
+2025-09-22 21:32:20,935 INFO sqlalchemy.engine.Engine PRAGMA main.table_info("websites")
+2025-09-22 21:32:20,935 INFO sqlalchemy.engine.Engine [raw sql] ()
+2025-09-22 21:32:20,936 INFO sqlalchemy.engine.Engine COMMIT
+INFO:     Application startup complete.
+WARNING:  WatchFiles detected changes in 'app/services/github_service.py'. Reloading...
+INFO:     Shutting down
+INFO:     Waiting for application shutdown.
+INFO:     Application shutdown complete.
+INFO:     Finished server process [369741]
+INFO:     Started server process [369864]
+INFO:     Waiting for application startup.
+2025-09-22 21:32:37,152 INFO sqlalchemy.engine.Engine BEGIN (implicit)
+2025-09-22 21:32:37,152 INFO sqlalchemy.engine.Engine PRAGMA main.table_info("websites")
+2025-09-22 21:32:37,152 INFO sqlalchemy.engine.Engine [raw sql] ()
+2025-09-22 21:32:37,153 INFO sqlalchemy.engine.Engine COMMIT
+INFO:     Application startup complete.
+WARNING:  WatchFiles detected changes in 'app/services/github_service.py'. Reloading...
+INFO:     Shutting down
+INFO:     Waiting for application shutdown.
+INFO:     Application shutdown complete.
+INFO:     Finished server process [369864]
+INFO:     Started server process [369966]
+INFO:     Waiting for application startup.
+2025-09-22 21:32:46,778 INFO sqlalchemy.engine.Engine BEGIN (implicit)
+2025-09-22 21:32:46,778 INFO sqlalchemy.engine.Engine PRAGMA main.table_info("websites")
+2025-09-22 21:32:46,778 INFO sqlalchemy.engine.Engine [raw sql] ()
+2025-09-22 21:32:46,779 INFO sqlalchemy.engine.Engine COMMIT
+INFO:     Application startup complete.
+WARNING:  WatchFiles detected changes in 'app/services/github_service.py'. Reloading...
+INFO:     Shutting down
+INFO:     Waiting for application shutdown.
+INFO:     Application shutdown complete.
+INFO:     Finished server process [369966]
+INFO:     Started server process [370022]
+INFO:     Waiting for application startup.
+2025-09-22 21:32:53,706 INFO sqlalchemy.engine.Engine BEGIN (implicit)
+2025-09-22 21:32:53,707 INFO sqlalchemy.engine.Engine PRAGMA main.table_info("websites")
+2025-09-22 21:32:53,707 INFO sqlalchemy.engine.Engine [raw sql] ()
+2025-09-22 21:32:53,710 INFO sqlalchemy.engine.Engine COMMIT
+INFO:     Application startup complete.
+WARNING:  WatchFiles detected changes in 'app/services/github_service.py'. Reloading...
+INFO:     Shutting down
+INFO:     Waiting for application shutdown.
+INFO:     Application shutdown complete.
+INFO:     Finished server process [370022]
+INFO:     Started server process [370107]
+INFO:     Waiting for application startup.
+2025-09-22 21:33:00,613 INFO sqlalchemy.engine.Engine BEGIN (implicit)
+2025-09-22 21:33:00,613 INFO sqlalchemy.engine.Engine PRAGMA main.table_info("websites")
+2025-09-22 21:33:00,613 INFO sqlalchemy.engine.Engine [raw sql] ()
+2025-09-22 21:33:00,614 INFO sqlalchemy.engine.Engine COMMIT
+INFO:     Application startup complete.
+WARNING:  WatchFiles detected changes in 'app/services/github_service.py'. Reloading...
+INFO:     Shutting down
+INFO:     Waiting for application shutdown.
+INFO:     Application shutdown complete.
+INFO:     Finished server process [370107]
+INFO:     Started server process [370450]
+INFO:     Waiting for application startup.
+2025-09-22 21:33:23,519 INFO sqlalchemy.engine.Engine BEGIN (implicit)
+2025-09-22 21:33:23,519 INFO sqlalchemy.engine.Engine PRAGMA main.table_info("websites")
+2025-09-22 21:33:23,519 INFO sqlalchemy.engine.Engine [raw sql] ()
+2025-09-22 21:33:23,520 INFO sqlalchemy.engine.Engine COMMIT
+INFO:     Application startup complete.
+WARNING:  WatchFiles detected changes in 'app/api/routes/websites.py'. Reloading...
+INFO:     Shutting down
+INFO:     Waiting for application shutdown.
+INFO:     Application shutdown complete.
+INFO:     Finished server process [370450]
+INFO:     Started server process [370598]
+INFO:     Waiting for application startup.
+2025-09-22 21:33:44,881 INFO sqlalchemy.engine.Engine BEGIN (implicit)
+2025-09-22 21:33:44,882 INFO sqlalchemy.engine.Engine PRAGMA main.table_info("websites")
+2025-09-22 21:33:44,882 INFO sqlalchemy.engine.Engine [raw sql] ()
+2025-09-22 21:33:44,883 INFO sqlalchemy.engine.Engine COMMIT
+INFO:     Application startup complete.
+WARNING:  WatchFiles detected changes in 'app/api/routes/websites.py'. Reloading...
+INFO:     Shutting down
+INFO:     Waiting for application shutdown.
+INFO:     Application shutdown complete.
+INFO:     Finished server process [370598]
+INFO:     Started server process [370691]
+INFO:     Waiting for application startup.
+2025-09-22 21:33:53,443 INFO sqlalchemy.engine.Engine BEGIN (implicit)
+2025-09-22 21:33:53,444 INFO sqlalchemy.engine.Engine PRAGMA main.table_info("websites")
+2025-09-22 21:33:53,444 INFO sqlalchemy.engine.Engine [raw sql] ()
+2025-09-22 21:33:53,445 INFO sqlalchemy.engine.Engine COMMIT
+INFO:     Application startup complete.
+WARNING:  WatchFiles detected changes in 'app/api/routes/websites.py'. Reloading...
+INFO:     Shutting down
+INFO:     Waiting for application shutdown.
+INFO:     Application shutdown complete.
+INFO:     Finished server process [370691]
+INFO:     Started server process [370788]
+INFO:     Waiting for application startup.
+2025-09-22 21:34:04,246 INFO sqlalchemy.engine.Engine BEGIN (implicit)
+2025-09-22 21:34:04,246 INFO sqlalchemy.engine.Engine PRAGMA main.table_info("websites")
+2025-09-22 21:34:04,246 INFO sqlalchemy.engine.Engine [raw sql] ()
+2025-09-22 21:34:04,247 INFO sqlalchemy.engine.Engine COMMIT
+INFO:     Application startup complete.
+WARNING:  WatchFiles detected changes in 'app/api/routes/websites.py'. Reloading...
+INFO:     Shutting down
+INFO:     Waiting for application shutdown.
+INFO:     Application shutdown complete.
+INFO:     Finished server process [370788]
+INFO:     Started server process [371204]
+INFO:     Waiting for application startup.
+2025-09-22 21:34:42,264 INFO sqlalchemy.engine.Engine BEGIN (implicit)
+2025-09-22 21:34:42,265 INFO sqlalchemy.engine.Engine PRAGMA main.table_info("websites")
+2025-09-22 21:34:42,265 INFO sqlalchemy.engine.Engine [raw sql] ()
+2025-09-22 21:34:42,267 INFO sqlalchemy.engine.Engine COMMIT
+INFO:     Application startup complete.
+WARNING:  WatchFiles detected changes in 'app/api/routes/websites.py'. Reloading...
+INFO:     Shutting down
+INFO:     Waiting for application shutdown.
+INFO:     Application shutdown complete.
+INFO:     Finished server process [371204]
+INFO:     Started server process [377323]
+INFO:     Waiting for application startup.
+2025-09-22 21:47:16,329 INFO sqlalchemy.engine.Engine BEGIN (implicit)
+2025-09-22 21:47:16,330 INFO sqlalchemy.engine.Engine PRAGMA main.table_info("websites")
+2025-09-22 21:47:16,330 INFO sqlalchemy.engine.Engine [raw sql] ()
+2025-09-22 21:47:16,331 INFO sqlalchemy.engine.Engine COMMIT
+INFO:     Application startup complete.
+WARNING:  WatchFiles detected changes in 'app/api/routes/websites.py'. Reloading...
+INFO:     Shutting down
+INFO:     Waiting for application shutdown.
+INFO:     Application shutdown complete.
+INFO:     Finished server process [377323]
+Process SpawnProcess-32:
+Traceback (most recent call last):
+  File "/usr/lib/python3.13/multiprocessing/process.py", line 313, in _bootstrap
+    self.run()
+    ~~~~~~~~^^
+  File "/usr/lib/python3.13/multiprocessing/process.py", line 108, in run
+    self._target(*self._args, **self._kwargs)
+    ~~~~~~~~~~~~^^^^^^^^^^^^^^^^^^^^^^^^^^^^^
+  File "/home/sirwan/apps-repo/.venv/lib/python3.13/site-packages/uvicorn/_subprocess.py", line 80, in subprocess_started
+    target(sockets=sockets)
+    ~~~~~~^^^^^^^^^^^^^^^^^
+  File "/home/sirwan/apps-repo/.venv/lib/python3.13/site-packages/uvicorn/server.py", line 67, in run
+    return asyncio_run(self.serve(sockets=sockets), loop_factory=self.config.get_loop_factory())
+  File "/usr/lib/python3.13/asyncio/runners.py", line 195, in run
+    return runner.run(main)
+           ~~~~~~~~~~^^^^^^
+  File "/usr/lib/python3.13/asyncio/runners.py", line 118, in run
+    return self._loop.run_until_complete(task)
+           ~~~~~~~~~~~~~~~~~~~~~~~~~~~~~^^^^^^
+  File "uvloop/loop.pyx", line 1518, in uvloop.loop.Loop.run_until_complete
+  File "/home/sirwan/apps-repo/.venv/lib/python3.13/site-packages/uvicorn/server.py", line 71, in serve
+    await self._serve(sockets)
+  File "/home/sirwan/apps-repo/.venv/lib/python3.13/site-packages/uvicorn/server.py", line 78, in _serve
+    config.load()
+    ~~~~~~~~~~~^^
+  File "/home/sirwan/apps-repo/.venv/lib/python3.13/site-packages/uvicorn/config.py", line 436, in load
+    self.loaded_app = import_from_string(self.app)
+                      ~~~~~~~~~~~~~~~~~~^^^^^^^^^^
+  File "/home/sirwan/apps-repo/.venv/lib/python3.13/site-packages/uvicorn/importer.py", line 19, in import_from_string
+    module = importlib.import_module(module_str)
+  File "/usr/lib/python3.13/importlib/__init__.py", line 88, in import_module
+    return _bootstrap._gcd_import(name[level:], package, level)
+           ~~~~~~~~~~~~~~~~~~~~~~^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^
+  File "<frozen importlib._bootstrap>", line 1387, in _gcd_import
+  File "<frozen importlib._bootstrap>", line 1360, in _find_and_load
+  File "<frozen importlib._bootstrap>", line 1331, in _find_and_load_unlocked
+  File "<frozen importlib._bootstrap>", line 935, in _load_unlocked
+  File "<frozen importlib._bootstrap_external>", line 1026, in exec_module
+  File "<frozen importlib._bootstrap>", line 488, in _call_with_frames_removed
+  File "/home/sirwan/apps-repo/idp/backend/app/main.py", line 2, in <module>
+    from app.api.routes import health, jobs, websites
+  File "/home/sirwan/apps-repo/idp/backend/app/api/routes/websites.py", line 191
+    website.status = WebsiteStatusEnum.CREATING
+    ^^^^^^^
+SyntaxError: expected 'except' or 'finally' block
+WARNING:  WatchFiles detected changes in 'app/api/routes/websites.py'. Reloading...
+INFO:     Started server process [379330]
+INFO:     Waiting for application startup.
+2025-09-22 21:50:55,944 INFO sqlalchemy.engine.Engine BEGIN (implicit)
+2025-09-22 21:50:55,944 INFO sqlalchemy.engine.Engine PRAGMA main.table_info("websites")
+2025-09-22 21:50:55,944 INFO sqlalchemy.engine.Engine [raw sql] ()
+2025-09-22 21:50:55,945 INFO sqlalchemy.engine.Engine COMMIT
+INFO:     Application startup complete.
+WARNING:  WatchFiles detected changes in 'app/services/github_service.py'. Reloading...
+INFO:     Shutting down
+INFO:     Waiting for application shutdown.
+INFO:     Application shutdown complete.
+INFO:     Finished server process [379330]
+INFO:     Started server process [379806]
+INFO:     Waiting for application startup.
+2025-09-22 21:51:42,294 INFO sqlalchemy.engine.Engine BEGIN (implicit)
+2025-09-22 21:51:42,294 INFO sqlalchemy.engine.Engine PRAGMA main.table_info("websites")
+2025-09-22 21:51:42,295 INFO sqlalchemy.engine.Engine [raw sql] ()
+2025-09-22 21:51:42,296 INFO sqlalchemy.engine.Engine COMMIT
+INFO:     Application startup complete.
+WARNING:  WatchFiles detected changes in 'app/api/routes/websites.py'. Reloading...
+INFO:     Shutting down
+INFO:     Waiting for application shutdown.
+INFO:     Application shutdown complete.
+INFO:     Finished server process [379806]
+INFO:     Started server process [380057]
+INFO:     Waiting for application startup.
+2025-09-22 21:52:18,495 INFO sqlalchemy.engine.Engine BEGIN (implicit)
+2025-09-22 21:52:18,495 INFO sqlalchemy.engine.Engine PRAGMA main.table_info("websites")
+2025-09-22 21:52:18,495 INFO sqlalchemy.engine.Engine [raw sql] ()
+2025-09-22 21:52:18,496 INFO sqlalchemy.engine.Engine COMMIT
+INFO:     Application startup complete.
+WARNING:  WatchFiles detected changes in 'app/services/github_service.py', 'app/api/routes/websites.py'. Reloading...
+INFO:     Shutting down
+INFO:     Waiting for application shutdown.
+INFO:     Application shutdown complete.
+INFO:     Finished server process [380057]
+INFO:     Started server process [381081]
+INFO:     Waiting for application startup.
+2025-09-22 21:54:17,984 INFO sqlalchemy.engine.Engine BEGIN (implicit)
+2025-09-22 21:54:17,984 INFO sqlalchemy.engine.Engine PRAGMA main.table_info("websites")
+2025-09-22 21:54:17,984 INFO sqlalchemy.engine.Engine [raw sql] ()
+2025-09-22 21:54:17,986 INFO sqlalchemy.engine.Engine COMMIT
+INFO:     Application startup complete.
