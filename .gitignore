@@ -108,8 +108,8 @@ charts/*/charts/
 charts/*/Chart.lock
 
 # Auto-generated values files (except templates)
-charts/website-template/values/values-*.yaml
-!charts/website-template/values/README.md
+# idp/backend/website-template/values/values-*.yaml  # Commented out to allow values in git
+!idp/backend/website-template/values/README.md
 
 # Kubernetes secrets
 *.secret.yaml

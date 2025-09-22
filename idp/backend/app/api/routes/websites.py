@@ -12,7 +12,7 @@ from app.database.models import (
     WebsiteStatusEnum,
     WebsiteTypeEnum,
 )
-from app.models.job import JobResponse
+from app.models.job import JobResponse, JobStatus, JobType
 from app.models.website import (
     ResourcePlanInfo,
     ResourcePlansResponse,
@@ -20,6 +20,7 @@ from app.models.website import (
     WebsiteListResponse,
     WebsiteResponse,
 )
+from app.services.github_service import github_service
 from fastapi import APIRouter, BackgroundTasks, Depends, HTTPException, Query
 from sqlalchemy.orm import Session
 
@@ -66,9 +67,9 @@ def create_helm_values_file(website: Website) -> str:
     """Create Helm values.yaml file for website deployment."""
     values = website.to_helm_values()
 
-    # Create values directory structure inside the Helm chart
-    base_dir = "/home/sirwan/apps-repo"
-    values_dir = f"{base_dir}/charts/website-template/values"
+    # Create values directory structure inside the backend
+    base_dir = "/home/sirwan/apps-repo/idp/backend"
+    values_dir = f"{base_dir}/website-template/values"
     os.makedirs(values_dir, exist_ok=True)
 
     # Write values file with format: values-{website_id}.yaml
@@ -86,6 +87,20 @@ def create_helm_values_file(website: Website) -> str:
         yaml.dump(values, f, default_flow_style=False, indent=2)
 
     print(f"Generated Helm values file: {values_path}")
+
+    # Automatically push to GitHub
+    try:
+        github_result = github_service.auto_push_values(
+            str(website.website_id), "created"
+        )
+        if github_result["success"]:
+            msg = github_result["message"]
+            print("✅ Successfully pushed to GitHub: " + msg)
+        else:
+            print(f"⚠️ GitHub push failed: {github_result['message']}")
+            # Log the error but don't fail the website creation
+    except Exception as e:
+        print(f"⚠️ GitHub push error: {str(e)}")
 
     return values_path
 
@@ -151,8 +166,8 @@ async def create_website(
     job_id = str(uuid.uuid4())
     job = JobResponse(
         id=job_id,
-        job_type="website_create",
-        status="pending",
+        job_type=JobType.WEBSITE_CREATE,
+        status=JobStatus.PENDING,
         website_id=website_id,
         progress=0,
         logs=[f"Website '{website_id}' created in database"],
@@ -167,32 +182,23 @@ async def create_website(
 
 async def process_website_creation(job_id: str, website_id: int, db: Session):
     """Background task to process website creation."""
+    website = db.query(Website).filter(Website.id == website_id).first()
+    if not website:
+        return
     try:
-        website = db.query(Website).filter(Website.id == website_id).first()
-        if not website:
-            return
-
-        # Update status to creating
         website.status = WebsiteStatusEnum.CREATING
         db.commit()
-
-        # Generate Helm values.yaml
         create_helm_values_file(website)
-
-        # TODO: Commit to Git repository
-        # TODO: Trigger ArgoCD sync
-
-        # Update status to running (for now)
         website.status = WebsiteStatusEnum.RUNNING
         website.deployed_at = datetime.utcnow()
         website.ingress_url = f"https://{website.domain}"
         db.commit()
-
-    except Exception as e:
-        # Update status to failed
-        website.status = WebsiteStatusEnum.FAILED
-        db.commit()
-        print(f"Error processing website creation: {e}")
+    except Exception as exc:
+        if website:
+            website.status = WebsiteStatusEnum.FAILED
+            db.commit()
+        print("Error processing website creation: " + str(exc))
+        return
 
 
 @router.get("/", response_model=WebsiteListResponse)
@@ -218,8 +224,8 @@ async def list_websites(
         website_responses.append(
             WebsiteResponse(
                 id=str(website.id),
-                website_id=website.website_id,
-                domain=website.domain,
+                website_id=str(website.website_id),
+                domain=str(website.domain),
                 resource_plan=website.resource_plan.value,
                 website_type=website.website_type.value,
                 status=website.status.value,
@@ -250,8 +256,8 @@ async def delete_website(website_id: str, background_tasks: BackgroundTasks):
     job_id = str(uuid.uuid4())
     job = JobResponse(
         id=job_id,
-        job_type="website_delete",
-        status="pending",
+        job_type=JobType.WEBSITE_DELETE,
+        status=JobStatus.PENDING,
         website_id=website_id,
         progress=0,
         logs=[],
@@ -278,8 +284,8 @@ async def restart_website(website_id: str, background_tasks: BackgroundTasks):
     job_id = str(uuid.uuid4())
     job = JobResponse(
         id=job_id,
-        job_type="website_update",
-        status="pending",
+        job_type=JobType.WEBSITE_UPDATE,
+        status=JobStatus.PENDING,
         website_id=website_id,
         progress=0,
         logs=[],
