@@ -2,6 +2,7 @@ import uvicorn
 from app.api.routes import health, jobs, websites
 from app.config import settings
 from app.database import init_db
+from app.services.github_service import github_service
 from fastapi import FastAPI
 from fastapi.middleware.cors import CORSMiddleware
 from fastapi.middleware.trustedhost import TrustedHostMiddleware
@@ -35,14 +36,25 @@ app.add_middleware(TrustedHostMiddleware, allowed_hosts=["*"])
 async def startup_event():
     """Initialize database tables on startup."""
     init_db()
+    # Start background watcher for new values files
+    try:
+        github_service.start_watcher()
+    except Exception as e:
+        print(f"Failed to start values watcher: {e}")
 
 
 # Include API routes
 app.include_router(health.router, prefix="/health", tags=["health"])
 app.include_router(
-    websites.router, prefix=f"{settings.API_V1_STR}/websites", tags=["websites"]
+    websites.router,
+    prefix=f"{settings.API_V1_STR}/websites",
+    tags=["websites"],
 )
-app.include_router(jobs.router, prefix=f"{settings.API_V1_STR}/jobs", tags=["jobs"])
+app.include_router(
+    jobs.router,
+    prefix=f"{settings.API_V1_STR}/jobs",
+    tags=["jobs"],
+)
 
 
 # Root endpoint
@@ -55,5 +67,9 @@ async def root():
 # Run the server directly
 if __name__ == "__main__":
     uvicorn.run(
-        "app.main:app", host="0.0.0.0", port=8000, reload=True, log_level="info"
+        "app.main:app",
+        host="0.0.0.0",
+        port=8000,
+        reload=True,
+        log_level="info",
     )
