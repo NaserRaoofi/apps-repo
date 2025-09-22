@@ -1,0 +1,78 @@
+version: "3.8"
+
+services:
+  backend:
+    build:
+      context: .
+      dockerfile: Dockerfile
+    image: website-idp-backend:latest
+    container_name: idp-backend
+    ports:
+      - "8000:8000"
+    environment:
+      # Database
+      - DATABASE_URL=sqlite:///./website_idp.db
+
+      # GitHub Service
+      - IDP_VALUES_BRANCH=main
+
+      # FastAPI
+      - PYTHONPATH=/app
+      - PYTHONUNBUFFERED=1
+
+      # Optional: Override default settings
+      # - API_V1_STR=/api/v1
+      # - PROJECT_NAME=Website IDP Backend
+
+    volumes:
+      # Mount values directory for persistence
+      - ./website-template/values:/app/website-template/values
+
+      # Mount database for persistence (if using SQLite)
+      - ./website_idp.db:/app/website_idp.db
+
+      # Optional: Mount git config if needed
+      # - ~/.gitconfig:/home/appuser/.gitconfig:ro
+      # - ~/.ssh:/home/appuser/.ssh:ro
+
+    restart: unless-stopped
+
+    # Health check
+    healthcheck:
+      test: ["CMD", "python", "-c", "import requests; requests.get('http://localhost:8000/health', timeout=5)"]
+      interval: 30s
+      timeout: 10s
+      retries: 3
+      start_period: 10s
+
+    # Resource limits (adjust as needed)
+    deploy:
+      resources:
+        limits:
+          memory: 512M
+          cpus: "0.5"
+        reservations:
+          memory: 256M
+          cpus: "0.25"
+
+# Optional: Add a reverse proxy (nginx) if needed
+# nginx:
+#   image: nginx:alpine
+#   container_name: idp-nginx
+#   ports:
+#     - "80:80"
+#     - "443:443"
+#   volumes:
+#     - ./nginx.conf:/etc/nginx/nginx.conf:ro
+#   depends_on:
+#     - backend
+#   restart: unless-stopped
+
+networks:
+  default:
+    name: idp-network
+
+volumes:
+  # Optional: Create named volumes for better data management
+  idp-data:
+    driver: local

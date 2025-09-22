@@ -32,6 +32,11 @@ class GitHubService:
         # Branch to push to (default main, override with ENV IDP_VALUES_BRANCH)
         self.target_branch = os.getenv("IDP_VALUES_BRANCH", "main")
 
+    def set_target_branch(self, branch: str) -> None:
+        """Explicitly set the target branch for pushes."""
+        self.target_branch = branch
+        print(f"[GitHubService] Target branch set to: {branch}")
+
     def git_command(self, cmd: List[str]) -> tuple[bool, str]:
         """Execute git command and return success status and output."""
         try:

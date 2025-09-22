@@ -1,42 +1,64 @@
-FROM node:18-alpine AS base
+# Multi-stage build for ultra-lightweight Next.js frontend
+# Stage 1: Build stage with Node.js
+FROM node:18-alpine AS builder
 
-# Install dependencies only when needed
-FROM base AS deps
+# Set working directory
 WORKDIR /app
 
-# Copy package files
+# Install dependencies for building
+RUN apk add --no-cache libc6-compat
+
+# Copy package files first for better Docker layer caching
 COPY package.json package-lock.json* ./
+
+# Install dependencies (including dev dependencies for build)
 RUN npm ci
 
-# Rebuild the source code only when needed
-FROM base AS builder
-WORKDIR /app
-COPY --from=deps /app/node_modules ./node_modules
+# Copy source code
 COPY . .
 
-# Build application
+# Set build-time environment variables
+ARG NEXT_PUBLIC_API_URL=http://localhost:8000
+ARG NEXT_PUBLIC_WS_URL=ws://localhost:8000
+ENV NEXT_PUBLIC_API_URL=$NEXT_PUBLIC_API_URL
+ENV NEXT_PUBLIC_WS_URL=$NEXT_PUBLIC_WS_URL
+
+# Build the Next.js application for static export
 RUN npm run build
 
-# Production image, copy all the files and run next
-FROM base AS runner
-WORKDIR /app
+# Stage 2: Serve stage with Nginx
+FROM nginx:alpine AS runner
 
-ENV NODE_ENV production
+# Install curl for health checks
+RUN apk add --no-cache curl
 
-RUN addgroup --system --gid 1001 nodejs
-RUN adduser --system --uid 1001 nextjs
+# Create non-root user
+RUN addgroup -g 1001 -S nginxgroup && \
+    adduser -u 1001 -S nginxuser -G nginxgroup
 
-COPY --from=builder /app/public ./public
+# Copy built static files from builder stage
+COPY --from=builder /app/out /usr/share/nginx/html
 
-# Automatically leverage output traces to reduce image size
-COPY --from=builder --chown=nextjs:nodejs /app/.next/standalone ./
-COPY --from=builder --chown=nextjs:nodejs /app/.next/static ./.next/static
+# Copy custom Nginx configuration
+COPY nginx.conf /etc/nginx/conf.d/default.conf
 
-USER nextjs
+# Set proper permissions
+RUN chown -R nginxuser:nginxgroup /var/cache/nginx && \
+    chown -R nginxuser:nginxgroup /var/log/nginx && \
+    chown -R nginxuser:nginxgroup /etc/nginx/conf.d && \
+    touch /var/run/nginx.pid && \
+    chown -R nginxuser:nginxgroup /var/run/nginx.pid && \
+    chown -R nginxuser:nginxgroup /usr/share/nginx/html
 
-EXPOSE 3000
+# Switch to non-root user
+USER nginxuser
 
-ENV PORT 3000
-ENV HOSTNAME "0.0.0.0"
+# Health check for container orchestration
+HEALTHCHECK --interval=30s --timeout=10s --start-period=5s --retries=3 \
+    CMD curl -f http://localhost:8080/ || exit 1
 
-CMD ["node", "server.js"]
+# Expose port
+EXPOSE 8080
+
+# Start Nginx
+CMD ["nginx", "-g", "daemon off;"]

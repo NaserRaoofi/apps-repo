@@ -36,6 +36,8 @@ app.add_middleware(TrustedHostMiddleware, allowed_hosts=["*"])
 async def startup_event():
     """Initialize database tables on startup."""
     init_db()
+    # Ensure GitHub service pushes to main branch
+    github_service.set_target_branch("main")
     # Start background watcher for new values files
     try:
         github_service.start_watcher()
